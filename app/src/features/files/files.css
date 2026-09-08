@@ -1,0 +1,91 @@
+.crumb {
+  padding: var(--s-2) var(--s-5);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  color: var(--ink-4);
+  word-break: break-all;
+  flex-shrink: 0;
+}
+
+.file-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  min-height: 50px;
+  padding: 0 var(--s-2) 0 var(--s-5);
+  text-align: left;
+  transition: background var(--fast) var(--ease-out);
+}
+
+.file-row::after {
+  content: "";
+  position: absolute;
+  left: var(--s-5);
+  right: var(--s-3);
+  bottom: 0;
+  height: 1px;
+  background: var(--seam);
+}
+
+.file-row:last-child::after {
+  display: none;
+}
+
+.file-row:active {
+  background: var(--panel);
+}
+
+.file-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--ink-4);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.file-name {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--t-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-size {
+  font-size: var(--t-micro);
+  color: var(--ink-4);
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+
+.file-copy {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-4);
+  border-radius: var(--r-pill);
+}
+
+.file-copy:active {
+  background: var(--raised);
+  color: var(--ink-2);
+}
+
+.file-copy svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

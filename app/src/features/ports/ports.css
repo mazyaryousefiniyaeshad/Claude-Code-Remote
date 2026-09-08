@@ -1,0 +1,73 @@
+.port-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-5);
+  min-height: 52px;
+}
+
+.port-row::after {
+  content: "";
+  position: absolute;
+  left: var(--s-5);
+  right: var(--s-5);
+  bottom: 0;
+  height: 1px;
+  background: var(--seam);
+}
+
+.port-num {
+  font-family: var(--font-mono);
+  font-weight: var(--w-strong);
+  font-size: var(--t-body);
+  min-width: 54px;
+  flex-shrink: 0;
+}
+
+.port-who {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--t-caption);
+  color: var(--ink-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.port-open {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 var(--s-3);
+  border-radius: var(--r-pill);
+  background: var(--clay-wash);
+  color: var(--clay);
+  font-size: var(--t-caption);
+  font-weight: var(--w-strong);
+  text-decoration: none;
+}
+
+.port-open:active {
+  background: var(--raised);
+}
+
+.port-local {
+  flex-shrink: 0;
+  font-size: var(--t-micro);
+  color: var(--ink-4);
+}
+
+.port-note {
+  padding: var(--s-5);
+  font-size: var(--t-caption);
+  color: var(--ink-4);
+  line-height: var(--lh-snug);
+  max-width: var(--measure);
+}
+
+.port-note em {
+  font-style: normal;
+  color: var(--ink-3);
+}

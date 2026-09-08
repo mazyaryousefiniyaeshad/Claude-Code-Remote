@@ -1,0 +1,77 @@
+.starswitch {
+  width: var(--tap);
+  height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  border-radius: var(--r-control);
+  transition: color var(--fast) var(--ease-out), background var(--fast) var(--ease-out);
+}
+
+.starswitch:active {
+  background: var(--panel);
+  color: var(--lamp);
+  transform: scale(0.94);
+}
+
+.starswitch svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+}
+
+.fav-jump {
+  display: flex;
+  align-items: stretch;
+  gap: var(--s-2);
+}
+
+.fav-jump-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  text-align: left;
+  border: none;
+  border-radius: var(--r-card);
+  background: var(--panel);
+  padding: var(--s-3) var(--s-4);
+}
+
+.fav-jump.is-here .fav-jump-main {
+  background: var(--raised);
+}
+
+.fav-jump-main:active {
+  background: var(--raised);
+}
+
+.fav-jump-top {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-width: 0;
+}
+
+.fav-jump-title {
+  font-size: var(--t-body);
+  font-weight: var(--w-strong);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+  unicode-bidi: plaintext;
+}
+
+.fav-jump-meta {
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,155 @@
+:root {
+  --unit: 4px;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 28px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+
+  --t-micro: 11px;
+  --t-caption: 12px;
+  --t-body: 15px;
+  --t-lead: 17px;
+  --t-title: 20px;
+  --t-display: 25px;
+  --t-hero: 31px;
+
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-strong: 600;
+  --w-heavy: 700;
+
+  --lh-tight: 1.25;
+  --lh-snug: 1.4;
+  --lh-body: 1.62;
+
+  --r-tight: 6px;
+  --r-control: 10px;
+  --r-card: 14px;
+  --r-nested: 8px;
+  --r-sheet: 20px;
+  --r-pill: 999px;
+
+  --tap: 44px;
+  --pulse-w: 1.5px;
+  --measure: 34rem;
+  --page: 44rem;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-move: cubic-bezier(0.77, 0, 0.175, 1);
+  --fast: 140ms;
+  --normal: 220ms;
+
+  --font-ui: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root,
+:root[data-theme="dark"] {
+  --studio: #100f12;
+  --desk: #171619;
+  --panel: #1c1b20;
+  --raised: #222127;
+  --inset: #0c0b0e;
+
+  --seam: rgba(255, 255, 255, 0.055);
+  --seam-strong: rgba(255, 255, 255, 0.11);
+
+  --ink: #eceaeb;
+  --ink-2: #a5a1a6;
+  --ink-3: #6f6c74;
+  --ink-4: #4a484f;
+
+  --clay: #dd7f55;
+  --clay-ink: #150d08;
+  --clay-wash: rgba(221, 127, 85, 0.11);
+  --clay-seam: rgba(221, 127, 85, 0.34);
+
+  --lamp: #e2a63f;
+  --lamp-wash: rgba(226, 166, 63, 0.12);
+  --lamp-seam: rgba(226, 166, 63, 0.42);
+
+  --drive: #6fbf87;
+  --drive-wash: rgba(111, 191, 135, 0.11);
+
+  --fault: #de7376;
+  --fault-wash: rgba(222, 115, 118, 0.11);
+
+  --focus: #7aa6ee;
+
+  --add-ink: #82cb95;
+  --add-wash: rgba(111, 191, 135, 0.1);
+  --del-ink: #de8b8d;
+  --del-wash: rgba(222, 115, 118, 0.09);
+
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --studio: #faf9f6;
+  --desk: #ffffff;
+  --panel: #f1efe9;
+  --raised: #e9e6df;
+  --inset: #edeae3;
+
+  --seam: rgba(28, 22, 16, 0.1);
+  --seam-strong: rgba(28, 22, 16, 0.19);
+
+  --ink: #191714;
+  --ink-2: #5c5850;
+  --ink-3: #86817a;
+  --ink-4: #aaa59d;
+
+  --clay: #ad4a26;
+  --clay-ink: #ffffff;
+  --clay-wash: rgba(173, 74, 38, 0.07);
+  --clay-seam: rgba(173, 74, 38, 0.28);
+
+  --lamp: #8f620d;
+  --lamp-wash: rgba(143, 98, 13, 0.08);
+  --lamp-seam: rgba(143, 98, 13, 0.32);
+
+  --drive: #2c7442;
+  --drive-wash: rgba(44, 116, 66, 0.07);
+
+  --fault: #a52c2e;
+  --fault-wash: rgba(165, 44, 46, 0.07);
+
+  --focus: #2b66c9;
+
+  --add-ink: #1c6631;
+  --add-wash: rgba(44, 116, 66, 0.08);
+  --del-ink: #9b2426;
+  --del-wash: rgba(165, 44, 46, 0.07);
+
+  color-scheme: light;
+}
+
+:root {
+  --adm-color-primary: var(--clay);
+  --adm-color-success: var(--drive);
+  --adm-color-warning: var(--lamp);
+  --adm-color-danger: var(--fault);
+  --adm-color-text: var(--ink);
+  --adm-color-text-secondary: var(--ink-2);
+  --adm-color-weak: var(--ink-3);
+  --adm-color-light: var(--ink-4);
+  --adm-color-border: var(--seam);
+  --adm-border-color: var(--seam);
+  --adm-color-background: var(--studio);
+  --adm-color-box: var(--panel);
+  --adm-color-fill-content: var(--inset);
+  --adm-font-family: var(--font-ui);
+  --adm-font-size-main: var(--t-body);
+  --adm-radius-s: var(--r-control);
+  --adm-radius-m: var(--r-card);
+  --adm-radius-l: var(--r-sheet);
+}

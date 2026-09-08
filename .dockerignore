@@ -1,0 +1,9 @@
+node_modules
+app/node_modules
+app/android
+app/dist
+app/ios
+.git
+*.log
+.DS_Store
+com.mazyar.claude-remote.daemon.plist

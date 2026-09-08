@@ -1,0 +1,85 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--studio);
+}
+
+.screen-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+  flex-shrink: 0;
+  padding: var(--s-2) var(--s-3);
+  padding-top: calc(var(--s-3) + var(--safe-top));
+  background: var(--studio);
+}
+
+.screen-heading {
+  flex: 1;
+  min-width: 0;
+  padding: 0 var(--s-2);
+}
+
+.screen-heading h1 {
+  font-size: var(--t-lead);
+  font-weight: var(--w-strong);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.015em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screen-heading p {
+  font-size: var(--t-micro);
+  color: var(--ink-4);
+  line-height: 1.5;
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screen-actions {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.screen-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.icon-btn {
+  width: var(--tap);
+  height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+  border-radius: var(--r-control);
+  transition: color var(--fast) var(--ease-out), background var(--fast) var(--ease-out),
+    transform var(--fast) var(--ease-out);
+}
+
+.icon-btn:active {
+  background: var(--panel);
+  color: var(--ink);
+  transform: scale(0.94);
+}
+
+.icon-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}

@@ -1,0 +1,262 @@
+.chip.is-active {
+  border-color: var(--clay-seam);
+  background: var(--clay-wash);
+  color: var(--clay);
+}
+
+.chip-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+}
+
+.chip.is-active .chip-icon {
+  fill: currentColor;
+}
+
+.sheet-tall {
+  height: 88dvh;
+}
+
+.skill-sheet {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding-bottom: var(--safe-bottom);
+}
+
+.skill-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-4) var(--s-2);
+  flex-shrink: 0;
+}
+
+.skill-head .sheet-title {
+  flex: 1;
+  padding: 0;
+}
+
+.skill-count {
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+}
+
+.skill-done {
+  min-height: 36px;
+  padding: 0 var(--s-3);
+  border: none;
+  background: var(--panel);
+  border-radius: var(--r-nested);
+  font-size: var(--t-caption);
+  font-weight: var(--w-medium);
+  color: var(--ink);
+}
+
+.skill-done:active {
+  background: var(--panel);
+}
+
+.skill-controls {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: 0 var(--s-4) var(--s-3);
+  border-bottom: 1px solid var(--seam);
+}
+
+.skill-search {
+  --background: var(--inset);
+  --border-radius: var(--r-control);
+  --height: 40px;
+}
+
+.skill-tags {
+  display: flex;
+  gap: var(--s-2);
+  overflow-x: auto;
+  padding-bottom: var(--s-1);
+  scrollbar-width: none;
+}
+
+.skill-tags::-webkit-scrollbar {
+  display: none;
+}
+
+.tag-chip {
+  flex-shrink: 0;
+  min-height: 32px;
+  padding: 0 var(--s-3);
+  border: none;
+  border-radius: var(--r-pill);
+  background: var(--panel);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.tag-chip .num {
+  color: var(--ink-4);
+  margin-left: 2px;
+}
+
+.tag-chip.is-on {
+  background: var(--clay-wash);
+  color: var(--clay);
+  font-weight: var(--w-strong);
+}
+
+.tag-chip.is-on .num {
+  color: var(--clay);
+}
+
+.skill-bulk {
+  display: flex;
+  gap: var(--s-2);
+}
+
+.skill-bulk button {
+  flex: 1;
+  min-height: 36px;
+  border: none;
+  background: var(--panel);
+  border-radius: var(--r-nested);
+  font-size: var(--t-caption);
+  color: var(--ink-2);
+}
+
+.skill-bulk button:disabled {
+  opacity: 0.4;
+}
+
+.skill-bulk button:not(:disabled):active {
+  background: var(--panel);
+}
+
+.skill-warn {
+  font-size: var(--t-caption);
+  color: var(--lamp);
+  background: var(--lamp-wash);
+  border: 1px solid var(--lamp-seam);
+  border-radius: var(--r-control);
+  padding: var(--s-2) var(--s-3);
+  line-height: 1.5;
+}
+
+.skill-list {
+  flex: 1;
+  min-height: 0;
+  padding: 0 var(--s-4) var(--s-4);
+}
+
+.skill-note {
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+  padding: var(--s-4) 0;
+  text-align: center;
+}
+
+.skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.skill-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: var(--s-4);
+}
+
+.skill-group-label {
+  font-size: var(--t-caption);
+  font-weight: var(--w-strong);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.skill-group-all {
+  font-size: var(--t-caption);
+  color: var(--clay);
+  min-height: 30px;
+  padding: 0 var(--s-2);
+}
+
+.skill-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  text-align: left;
+  border: none;
+  border-radius: var(--r-nested);
+  background: var(--panel);
+  padding: var(--s-3);
+  min-height: var(--tap);
+}
+
+.skill-row.is-on {
+  background: var(--clay-wash);
+  box-shadow: inset 0 0 0 1.5px var(--clay-seam);
+}
+
+.skill-box {
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--seam-strong);
+  border-radius: var(--s-1);
+  position: relative;
+}
+
+.skill-row.is-on .skill-box {
+  border-color: var(--clay);
+  background: var(--clay);
+}
+
+.skill-row.is-on .skill-box::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--clay-ink);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.skill-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.skill-text b {
+  font-size: var(--t-body);
+  font-weight: var(--w-strong);
+  font-family: var(--font-mono);
+}
+
+.skill-text em {
+  font-style: normal;
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

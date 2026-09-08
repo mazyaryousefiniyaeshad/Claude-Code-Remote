@@ -1,0 +1,41 @@
+.star {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink-4);
+  transition: color var(--fast) var(--ease-out), background var(--fast) var(--ease-out),
+    transform var(--fast) var(--ease-out);
+}
+
+.star svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linejoin: round;
+}
+
+.star:not(:disabled):active {
+  transform: scale(0.9);
+  background: var(--panel);
+}
+
+.star.is-on {
+  color: var(--lamp);
+}
+
+.star.is-on svg {
+  fill: currentColor;
+  stroke-width: 1.2;
+}
+
+.star:disabled {
+  opacity: 0.45;
+}

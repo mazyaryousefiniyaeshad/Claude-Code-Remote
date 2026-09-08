@@ -1,0 +1,84 @@
+.session-list {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-3) var(--s-3) var(--s-6);
+}
+
+.new-session {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  border: none;
+  border-radius: var(--r-card);
+  background: var(--panel);
+  padding: var(--s-3);
+  margin-bottom: var(--s-4);
+  color: var(--clay);
+  font-size: var(--t-body);
+  font-weight: var(--w-strong);
+  min-height: var(--tap);
+}
+
+.new-session:active {
+  background: var(--raised);
+}
+
+.session-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.session-row::after {
+  content: "";
+  position: absolute;
+  left: var(--s-2);
+  right: var(--s-2);
+  bottom: 0;
+  height: 1px;
+  background: var(--seam);
+}
+
+.session-row:last-child::after {
+  display: none;
+}
+
+.session-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: var(--r-card);
+  padding: var(--s-3) var(--s-2);
+  transition: background var(--fast) var(--ease-out);
+}
+
+.session-main:active {
+  background: var(--panel);
+}
+
+.session-title {
+  font-size: var(--t-lead);
+  font-weight: var(--w-strong);
+  letter-spacing: -0.012em;
+  line-height: var(--lh-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+  unicode-bidi: plaintext;
+}
+
+.session-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+}

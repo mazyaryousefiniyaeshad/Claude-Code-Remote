@@ -1,0 +1,104 @@
+.settings {
+  padding: var(--s-4) var(--s-5) var(--s-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-7);
+  max-width: var(--measure);
+}
+
+.field h2 {
+  font-size: var(--t-micro);
+  font-weight: var(--w-strong);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: var(--s-3);
+}
+
+.segmented {
+  display: flex;
+  gap: var(--s-2);
+}
+
+.segmented button {
+  flex: 1;
+  min-height: var(--tap);
+  border: none;
+  border-radius: var(--r-control);
+  background: var(--panel);
+  font-size: var(--t-body);
+  color: var(--ink-3);
+  transition: color var(--fast) var(--ease-out), background var(--fast) var(--ease-out);
+}
+
+.segmented button[aria-pressed="true"] {
+  background: var(--clay-wash);
+  color: var(--clay);
+  font-weight: var(--w-strong);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.stepper button {
+  min-width: 54px;
+  min-height: var(--tap);
+  border: none;
+  border-radius: var(--r-control);
+  background: var(--panel);
+  font-size: var(--t-body);
+  color: var(--ink-2);
+}
+
+.stepper button:active {
+  background: var(--raised);
+}
+
+.stepper-value {
+  flex: 1;
+  text-align: center;
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+  font-family: var(--font-mono);
+}
+
+.danger {
+  width: 100%;
+  min-height: var(--tap);
+  border: none;
+  border-radius: var(--r-control);
+  background: var(--panel);
+  color: var(--fault);
+  font-size: var(--t-body);
+}
+
+.danger:active {
+  background: var(--fault-wash);
+}
+
+.field-hint {
+  font-size: var(--t-caption);
+  color: var(--ink-4);
+  line-height: var(--lh-snug);
+  margin-top: var(--s-2);
+}
+
+.field-input {
+  width: 100%;
+  min-height: var(--tap);
+  border: none;
+  border-radius: var(--r-control);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: var(--t-body);
+  font-family: var(--font-mono);
+  padding: 0 var(--s-3);
+}
+
+.field-input:focus {
+  outline: none;
+  background: var(--raised);
+}

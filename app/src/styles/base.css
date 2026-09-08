@@ -1,0 +1,224 @@
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/fonts/Vazirmatn.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  background: var(--studio);
+}
+
+body {
+  background: var(--studio);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--s-1);
+}
+
+button {
+  font: inherit;
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+input,
+textarea {
+  font: inherit;
+  font-family: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.adm-list-body,
+.adm-list-item {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.page-width {
+  width: 100%;
+  max-width: var(--page);
+  margin-inline: auto;
+}
+
+@media (min-width: 700px) {
+  .screen-bar {
+    padding-inline: max(var(--s-3), calc((100vw - var(--page)) / 2 + var(--s-3)));
+  }
+
+  .screen-body > .stack,
+  .screen-body > .section,
+  .session-list,
+  .settings,
+  .chat-body,
+  .crumb,
+  .file-row,
+  .port-row,
+  .port-note,
+  .empty {
+    max-width: var(--page);
+    margin-inline: auto;
+  }
+
+  .composer > * {
+    max-width: var(--page);
+    margin-inline: auto;
+  }
+
+  .composer-chips,
+  .attach-list,
+  .queue-strip {
+    justify-content: flex-start;
+  }
+
+  .run-bar {
+    padding-inline: max(var(--s-5), calc((100vw - var(--page)) / 2));
+  }
+}
+
+@media (min-width: 1000px) {
+  :root {
+    --page: 50rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --s-5: 14px;
+    --s-6: 16px;
+    --s-7: 18px;
+  }
+
+  .screen-bar {
+    padding-top: calc(var(--s-1) + var(--safe-top));
+    padding-bottom: var(--s-1);
+  }
+
+  .screen-heading p {
+    display: none;
+  }
+
+  .screen-heading h1 {
+    font-size: var(--t-body);
+  }
+
+  .icon-btn,
+  .switcher,
+  .starswitch {
+    width: 38px;
+    height: 38px;
+  }
+
+  .composer {
+    padding-top: var(--s-1);
+    padding-bottom: calc(var(--s-1) + var(--safe-bottom));
+  }
+
+  .composer-chips {
+    padding-bottom: var(--s-1);
+  }
+
+  .chip {
+    min-height: 26px;
+  }
+
+  .composer-input {
+    min-height: 38px;
+    max-height: 26vh;
+    padding: var(--s-2) var(--s-3);
+  }
+
+  .send-btn,
+  .composer-row > button {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+
+  .run-bar {
+    padding-block: var(--s-1);
+  }
+
+  .turn {
+    padding-bottom: var(--s-5);
+  }
+
+  .sheet,
+  .sheet-tall {
+    max-height: 92dvh;
+    height: auto;
+  }
+}
