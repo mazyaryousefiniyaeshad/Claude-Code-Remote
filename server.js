@@ -78,7 +78,7 @@ app.use("/api", (req, res, next) => {
 app.use("/api", (req, res, next) => {
   const t = tokenOf(req);
   if (t && t.length === TOKEN.length && crypto.timingSafeEqual(Buffer.from(t), Buffer.from(TOKEN))) return next();
-  res.status(401).json({ error: "توکن نامعتبر" });
+  res.status(401).json({ error: "Invalid token" });
 });
 
 const ok = (res, data) => res.json(data);
@@ -139,10 +139,10 @@ app.post("/api/favorites", async (req, res) => {
 app.post("/api/run", async (req, res) => {
   try {
     const { cwd, sessionId, prompt, model, permissionMode, effort } = req.body || {};
-    if (!prompt?.trim()) return fail(res, new Error("پیام خالی است"));
+    if (!prompt?.trim()) return fail(res, new Error("Message is empty"));
     const dir = safePath(String(cwd || ""));
     const st = await fsp.stat(dir);
-    if (!st.isDirectory()) throw new Error("مسیر پوشه نیست");
+    if (!st.isDirectory()) throw new Error("Path is not a folder");
     const run = startRun({ cwd: dir, sessionId: sessionId || null, prompt, model, permissionMode, effort });
     ok(res, { runId: run.runId, sessionId: run.sessionId });
   } catch (e) { fail(res, e); }
