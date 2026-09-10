@@ -172,6 +172,80 @@
   color: var(--ink-2);
 }
 
+.code-wrap {
+  position: relative;
+}
+
+.code-wrap .code-block {
+  padding-inline-end: calc(var(--s-4) + 30px);
+}
+
+.code-copy {
+  position: absolute;
+  top: calc(var(--s-3) + 4px);
+  inset-inline-end: var(--s-2);
+  background: var(--inset);
+}
+
+.turn-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+}
+
+.turn-top .turn-who {
+  margin-bottom: 0;
+}
+
+.turn-copy {
+  margin-inline-end: -6px;
+}
+
+.prompt-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.prompt-top .copy {
+  margin-inline-end: -6px;
+}
+
+.qtitle-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-2);
+}
+
+.qtitle-row .qtitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.qtitle-row .copy {
+  margin-inline-end: -6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .turn-copy,
+  .code-copy {
+    opacity: 0;
+    transition: opacity var(--fast) var(--ease-out);
+  }
+
+  .turn:hover .turn-copy,
+  .turn:focus-within .turn-copy,
+  .code-wrap:hover .code-copy,
+  .code-wrap:focus-within .code-copy,
+  .copy:focus-visible {
+    opacity: 1;
+  }
+}
+
 .think {
   margin: var(--s-2) 0 var(--s-3);
 }
@@ -735,6 +809,30 @@
 .mode-plan { background: var(--ink-3); }
 .mode-bypassPermissions { background: var(--fault); }
 
+.chip-spark {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  border: 1.5px solid var(--seam-strong);
+  transform: rotate(45deg);
+  transition:
+    border-color var(--fast) var(--ease-out),
+    background var(--fast) var(--ease-out);
+}
+
+.model-default { border-color: var(--ink-4); }
+.model-fable { border-color: var(--fault); background: var(--fault); }
+.model-opus { border-color: var(--clay); background: var(--clay); }
+.model-sonnet { border-color: var(--lamp); background: var(--lamp); }
+.model-haiku { border-color: var(--drive); background: var(--drive); }
+
+.sheet-note {
+  padding-top: var(--s-2);
+  font-size: var(--t-caption);
+  color: var(--ink-3);
+}
+
 .bars {
   display: inline-flex;
   align-items: flex-end;
@@ -810,6 +908,7 @@
 }
 
 .pick > .chip-dot,
+.pick > .chip-spark,
 .pick > .bars {
   margin-top: 5px;
 }

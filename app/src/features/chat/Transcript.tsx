@@ -3,6 +3,7 @@ import type { Message, MessagePart } from "../../api/types";
 import { RichText } from "../../lib/markdown";
 import { directionOf } from "../../lib/direction";
 import { ToolCard } from "./ToolCard";
+import { CopyButton } from "../../components/CopyButton";
 
 function Thinking({ text, live }: { text: string; live: boolean }) {
   const [open, setOpen] = useState(live);
@@ -25,7 +26,12 @@ export function Parts({ parts, live = false }: { parts: MessagePart[]; live?: bo
   return (
     <>
       {parts.map((part, index) => {
-        if (part.kind === "text") return <div key={index} className="prose"><RichText text={part.text} /></div>;
+        if (part.kind === "text")
+          return (
+            <div key={index} className="prose">
+              <RichText text={part.text} />
+            </div>
+          );
         if (part.kind === "thinking") return <Thinking key={index} text={part.text} live={live} />;
         if (part.kind === "tool") return <ToolCard key={part.id ?? index} part={part} />;
         return (
@@ -38,6 +44,14 @@ export function Parts({ parts, live = false }: { parts: MessagePart[]; live?: bo
       })}
     </>
   );
+}
+
+function textOf(message: Message): string {
+  return message.parts
+    .filter((part) => part.kind === "text")
+    .map((part) => (part as { text: string }).text)
+    .join("\n\n")
+    .trim();
 }
 
 function mergeAssistant(messages: Message[]): Message[] {
@@ -56,14 +70,20 @@ function mergeAssistant(messages: Message[]): Message[] {
 export function Transcript({ messages }: { messages: Message[] }) {
   return (
     <>
-      {mergeAssistant(messages).map((message, index) => (
-        <article key={index} className={`turn turn-${message.role}`}>
-          <p className="turn-who">{message.role === "user" ? "You" : "Claude"}</p>
-          <div className="turn-body">
-            <Parts parts={message.parts} />
-          </div>
-        </article>
-      ))}
+      {mergeAssistant(messages).map((message, index) => {
+        const whole = textOf(message);
+        return (
+          <article key={index} className={`turn turn-${message.role}`}>
+            <div className="turn-top">
+              <p className="turn-who">{message.role === "user" ? "You" : "Claude"}</p>
+              {whole ? <CopyButton text={whole} label="Copy whole message" className="turn-copy" /> : null}
+            </div>
+            <div className="turn-body">
+              <Parts parts={message.parts} />
+            </div>
+          </article>
+        );
+      })}
     </>
   );
 }

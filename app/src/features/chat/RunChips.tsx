@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Popup } from "antd-mobile";
-import { EFFORTS, MODES, effortOf, modeOf } from "./catalog";
+import { EFFORTS, MODELS, MODES, effortOf, modeOf, modelOf } from "./catalog";
 import { until } from "../../lib/format";
 import { useUsage } from "../../api/hooks";
 import { writeRunOption } from "../../lib/storage";
@@ -17,19 +17,25 @@ function Bars({ level }: { level: number }) {
 }
 
 interface Props {
+  model: string;
   mode: PermissionMode;
   effort: Effort;
-  onChange: (next: { mode: PermissionMode; effort: Effort }) => void;
+  onChange: (next: { model: string; mode: PermissionMode; effort: Effort }) => void;
 }
 
-export function RunChips({ mode, effort, onChange }: Props) {
-  const [sheet, setSheet] = useState<"mode" | "effort" | "usage" | null>(null);
+export function RunChips({ model, mode, effort, onChange }: Props) {
+  const [sheet, setSheet] = useState<"model" | "mode" | "effort" | "usage" | null>(null);
   const usage = useUsage();
   const window5 = usage.data?.fiveHour;
   const percent = window5 ? Math.max(0, Math.min(100, Math.round(window5.utilization))) : null;
 
   return (
     <>
+      <button className="chip" onClick={() => setSheet("model")} aria-haspopup="dialog">
+        <span className={`chip-spark model-${modelOf(model).id || "default"}`} aria-hidden="true" />
+        {modelOf(model).short}
+      </button>
+
       <button className="chip" onClick={() => setSheet("mode")} aria-haspopup="dialog">
         <span className={`chip-dot mode-${mode}`} aria-hidden="true" />
         {modeOf(mode).label}
@@ -60,6 +66,30 @@ export function RunChips({ mode, effort, onChange }: Props) {
         </button>
       ) : null}
 
+      <Popup visible={sheet === "model"} onMaskClick={() => setSheet(null)} bodyClassName="sheet">
+        <div className="sheet-inner">
+          <h2 className="sheet-title">Model</h2>
+          {MODELS.map((entry) => (
+            <button
+              key={entry.id || "default"}
+              className={`pick${entry.id === (model || "") ? " is-on" : ""}`}
+              onClick={() => {
+                writeRunOption("model", entry.id);
+                onChange({ model: entry.id, mode, effort });
+                setSheet(null);
+              }}
+            >
+              <span className={`chip-spark model-${entry.id || "default"}`} aria-hidden="true" />
+              <span className="pick-text">
+                <b>{entry.label}</b>
+                <em>{entry.hint}</em>
+              </span>
+            </button>
+          ))}
+          <p className="sheet-note">Applies to the next run you start.</p>
+        </div>
+      </Popup>
+
       <Popup visible={sheet === "mode"} onMaskClick={() => setSheet(null)} bodyClassName="sheet">
         <div className="sheet-inner">
           <h2 className="sheet-title">Permission mode</h2>
@@ -69,7 +99,7 @@ export function RunChips({ mode, effort, onChange }: Props) {
               className={`pick${entry.id === mode ? " is-on" : ""}`}
               onClick={() => {
                 writeRunOption("permission", entry.id);
-                onChange({ mode: entry.id, effort });
+                onChange({ model, mode: entry.id, effort });
                 setSheet(null);
               }}
             >
@@ -126,7 +156,7 @@ export function RunChips({ mode, effort, onChange }: Props) {
               className={`pick${entry.id === effort ? " is-on" : ""}`}
               onClick={() => {
                 writeRunOption("effort", entry.id);
-                onChange({ mode, effort: entry.id });
+                onChange({ model, mode, effort: entry.id });
                 setSheet(null);
               }}
             >

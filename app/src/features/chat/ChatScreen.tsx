@@ -229,10 +229,16 @@ export function ChatScreen() {
               <>
                 <SkillPicker cwd={cwd} selected={skills} onChange={setSkills} />
                 <RunChips
+                  model={options.model}
                   mode={options.permissionMode}
                   effort={options.effort}
                   onChange={(next) =>
-                    setOptions((current) => ({ ...current, permissionMode: next.mode, effort: next.effort }))
+                    setOptions((current) => ({
+                      ...current,
+                      model: next.model,
+                      permissionMode: next.mode,
+                      effort: next.effort,
+                    }))
                   }
                 />
               </>

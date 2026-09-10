@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { directionOf } from "./direction";
+import { CopyButton } from "../components/CopyButton";
 
 type Segment = { kind: "code"; text: string } | { kind: "line"; text: string };
 
@@ -53,9 +54,12 @@ export function RichText({ text }: { text: string }) {
       {segments.map((item, index) => {
         if (item.kind === "code") {
           return (
-            <pre key={index} className="code-block" dir="ltr">
-              <code>{item.text}</code>
-            </pre>
+            <div key={index} className="code-wrap">
+              <pre className="code-block" dir="ltr">
+                <code>{item.text}</code>
+              </pre>
+              <CopyButton text={item.text} label="Copy this block" className="code-copy" />
+            </div>
           );
         }
         const raw = item.text;

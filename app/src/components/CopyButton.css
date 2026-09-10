@@ -1,0 +1,70 @@
+.copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-nested);
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition:
+    color var(--fast) var(--ease-move),
+    background var(--fast) var(--ease-move),
+    border-color var(--fast) var(--ease-move);
+}
+
+.copy svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.copy:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--raised);
+  border-color: var(--seam);
+}
+
+.copy:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.copy:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 2px;
+}
+
+.copy:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.copy.is-done {
+  color: var(--drive);
+  border-color: transparent;
+  background: transparent;
+}
+
+.copy.is-failed {
+  color: var(--fault);
+}
+
+@media (pointer: coarse) {
+  .copy {
+    width: 34px;
+    height: 34px;
+  }
+
+  .copy svg {
+    width: 17px;
+    height: 17px;
+  }
+}

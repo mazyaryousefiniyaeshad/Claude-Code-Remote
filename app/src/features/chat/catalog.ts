@@ -1,5 +1,21 @@
 import type { Effort, PermissionMode } from "../../api/types";
 
+export interface ModelEntry {
+  id: string;
+  label: string;
+  short: string;
+  hint: string;
+}
+
+export const MODELS: ModelEntry[] = [
+  { id: "", label: "Default", short: "Model", hint: "Whatever Claude Code is set to use." },
+  { id: "fable", label: "Fable", short: "Fable", hint: "The most capable. Slowest and most expensive." },
+  { id: "opus", label: "Opus", short: "Opus", hint: "Strong all-rounder. Good for hard work." },
+  { id: "sonnet", label: "Sonnet", short: "Sonnet", hint: "Faster and cheaper. Fine for most tasks." },
+  { id: "haiku", label: "Haiku", short: "Haiku", hint: "Fastest and cheapest. Small edits only." },
+];
+
+
 export interface ModeEntry {
   id: PermissionMode;
   label: string;
@@ -31,5 +47,6 @@ export const EFFORTS: EffortEntry[] = [
   { id: "max", label: "Max", short: "Max", hint: "Everything it has. Slowest, most expensive.", level: 5 },
 ];
 
+export const modelOf = (id: string) => MODELS.find((entry) => entry.id === (id || "")) ?? MODELS[0];
 export const modeOf = (id: string) => MODES.find((entry) => entry.id === id) ?? MODES[0];
 export const effortOf = (id: string) => EFFORTS.find((entry) => entry.id === (id || "")) ?? EFFORTS[0];

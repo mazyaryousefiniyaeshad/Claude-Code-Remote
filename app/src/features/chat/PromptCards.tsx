@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Input } from "antd-mobile";
 import type { PendingPermission, PendingQuestion } from "../../api/types";
 import { directionOf } from "../../lib/direction";
+import { CopyButton } from "../../components/CopyButton";
 
 interface PermissionProps {
   pending: PendingPermission;
@@ -22,7 +23,10 @@ export function PermissionCard({ pending, onDecide }: PermissionProps) {
 
   return (
     <section className="prompt prompt-permission" role="alertdialog" aria-label="Permission needed">
-      <p className="prompt-kicker">Permission needed</p>
+      <div className="prompt-top">
+        <p className="prompt-kicker">Permission needed</p>
+        {preview ? <CopyButton text={preview} label="Copy this command" /> : null}
+      </div>
       <div className="prompt-what">
         <span className="tool-name">{pending.displayName || pending.toolName}</span>
         <span className="tool-subject">{pending.description ?? ""}</span>
@@ -56,6 +60,19 @@ interface QuestionProps {
   onSkip: () => void;
 }
 
+function questionText(pending: PendingQuestion): string {
+  return pending.questions
+    .map((question) => {
+      const head = question.header ? `${question.header}\n` : "";
+      const options = question.options
+        .map((option) => `- ${option.label}${option.description ? `: ${option.description}` : ""}`)
+        .join("\n");
+      return `${head}${question.question}\n${options}`;
+    })
+    .join("\n\n")
+    .trim();
+}
+
 export function QuestionCard({ pending, onAnswer, onSkip }: QuestionProps) {
   const [draft, setDraft] = useState(() =>
     pending.questions.map(() => ({ selected: [] as string[], other: "" })),
@@ -87,14 +104,20 @@ export function QuestionCard({ pending, onAnswer, onSkip }: QuestionProps) {
 
   return (
     <section className="prompt prompt-question" role="group" aria-label="Claude is asking">
-      <p className="prompt-kicker">Claude is asking</p>
+      <div className="prompt-top">
+        <p className="prompt-kicker">Claude is asking</p>
+        <CopyButton text={questionText(pending)} label="Copy the question" />
+      </div>
 
       {pending.questions.map((question, index) => (
         <div key={index} className="qblock">
           {question.header ? <p className="qheader">{question.header}</p> : null}
-          <p className="qtitle" dir={directionOf(question.question)} style={{ unicodeBidi: "plaintext" }}>
-            {question.question}
-          </p>
+          <div className="qtitle-row">
+            <p className="qtitle" dir={directionOf(question.question)} style={{ unicodeBidi: "plaintext" }}>
+              {question.question}
+            </p>
+            <CopyButton text={question.question} label="Copy this question" />
+          </div>
           {question.multiSelect ? <p className="qhint">Pick one or more</p> : null}
 
           <div className="qoptions">
