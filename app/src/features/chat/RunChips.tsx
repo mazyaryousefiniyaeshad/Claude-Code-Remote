@@ -118,15 +118,16 @@ export function RunChips({ model, mode, effort, onChange }: Props) {
           <h2 className="sheet-title">Plan usage</h2>
           {usage.data?.available ? (
             <>
-              {(["fiveHour", "sevenDay"] as const).map((key) => {
-                const win = usage.data?.[key];
-                if (!win) return null;
-                const value = Math.max(0, Math.min(100, Math.round(win.utilization)));
-                const resets = until(win.resetsAt);
+              {(usage.data.limits ?? []).map((limit) => {
+                const value = Math.max(0, Math.min(100, Math.round(limit.utilization)));
+                const resets = until(limit.resetsAt);
                 return (
-                  <div key={key} className="usage-row">
+                  <div key={limit.key} className={`usage-row${limit.isActive ? " is-active" : ""}`}>
                     <div className="usage-head">
-                      <span className="usage-label">{key === "fiveHour" ? "5 hours" : "7 days"}</span>
+                      <span className="usage-label">
+                        {limit.label}
+                        {limit.isActive ? <span className="usage-now">in use</span> : null}
+                      </span>
                       <span className="usage-value num">{value}%</span>
                     </div>
                     <span className={`usage-bar${value >= 85 ? " is-hot" : value >= 60 ? " is-warm" : ""}`}>

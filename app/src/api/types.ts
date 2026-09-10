@@ -136,11 +136,22 @@ export interface UsageWindow {
   resetsAt: string | null;
 }
 
+export interface UsageLimit {
+  key: string;
+  label: string;
+  scope: string | null;
+  utilization: number;
+  resetsAt: string | null;
+  severity: string;
+  isActive: boolean;
+}
+
 export interface Usage {
   available: boolean;
   plan?: string | null;
   fiveHour?: UsageWindow | null;
   sevenDay?: UsageWindow | null;
+  limits?: UsageLimit[];
   fetchedAt?: number;
 }
 

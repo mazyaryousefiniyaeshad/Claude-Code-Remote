@@ -949,11 +949,32 @@
 }
 
 .usage-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
   font-size: var(--t-caption);
   font-weight: var(--w-strong);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-3);
+}
+
+.usage-row.is-active {
+  border-color: var(--clay);
+}
+
+.usage-row.is-active .usage-label {
+  color: var(--ink-2);
+}
+
+.usage-now {
+  padding: 1px 6px;
+  border-radius: var(--r-pill);
+  background: var(--clay);
+  color: var(--studio);
+  font-size: var(--t-micro);
+  font-weight: var(--w-heavy);
+  letter-spacing: 0.06em;
 }
 
 .usage-value {
