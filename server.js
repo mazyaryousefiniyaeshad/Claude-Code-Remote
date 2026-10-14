@@ -8,7 +8,7 @@ import os from "node:os";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 
-import { listWorkspaces, listSessions, readHistory, encodeCwd } from "./lib/sessions.js";
+import { listWorkspaces, listSessions, readHistory, sessionExists } from "./lib/sessions.js";
 import {
   startRun,
   getRun,
@@ -120,10 +120,7 @@ app.get("/api/skills", async (req, res) => {
 
 app.get("/api/favorites", async (_req, res) => {
   try {
-    const list = await pruneFavorites(async (f) => {
-      try { await fsp.access(path.join(os.homedir(), ".claude", "projects", encodeCwd(f.cwd), `${f.sessionId}.jsonl`)); return true; }
-      catch { return false; }
-    });
+    const list = await pruneFavorites((f) => sessionExists(f.cwd, f.sessionId));
     ok(res, { favorites: [...list].sort((a, b) => b.starredAt - a.starredAt) });
   } catch (e) { fail(res, e); }
 });
