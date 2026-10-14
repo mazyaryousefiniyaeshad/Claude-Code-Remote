@@ -11,7 +11,6 @@ export default defineConfig({
     allowedHosts: [".ts.net", ".local", "localhost"],
     proxy: {
       "/api": { target: API_TARGET, changeOrigin: true, ws: false },
-      "/fonts": { target: API_TARGET, changeOrigin: true },
     },
   },
   preview: {
@@ -20,7 +19,6 @@ export default defineConfig({
     allowedHosts: [".ts.net", ".local", "localhost"],
     proxy: {
       "/api": { target: API_TARGET, changeOrigin: true, ws: false },
-      "/fonts": { target: API_TARGET, changeOrigin: true },
     },
   },
   build: {

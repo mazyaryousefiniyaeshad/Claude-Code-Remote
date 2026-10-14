@@ -29,7 +29,6 @@ RUN npm ci --omit=dev --no-audit --no-fund \
 
 COPY server.js ./
 COPY lib ./lib
-COPY public ./public
 COPY --from=web /build/app/dist ./app/dist
 
 RUN mkdir -p /home/node/.claude-remote/uploads /home/node/.claude-remote/logs \

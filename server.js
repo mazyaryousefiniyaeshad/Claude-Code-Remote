@@ -291,65 +291,39 @@ app.post("/api/upload", (req, res) => {
   req.pipe(bb);
 });
 
-const PUBLIC_DIR = path.join(__dirname, "public");
-
-async function assetVersion() {
-  const stamps = await Promise.all(
-    ["app.js", "style.css"].map((f) => fsp.stat(path.join(PUBLIC_DIR, f)).then((st) => st.mtimeMs).catch(() => 0))
-  );
-  return Math.max(...stamps).toString(36);
-}
-
-async function sendShell(_req, res) {
-  try {
-    const [html, v] = await Promise.all([
-      fsp.readFile(path.join(PUBLIC_DIR, "index.html"), "utf8"),
-      assetVersion(),
-    ]);
-    res.set("Cache-Control", "no-store");
-    res.type("html").send(html.replace(/\/(app\.js|style\.css)/g, `/$1?v=${v}`));
-  } catch (e) {
-    fail(res, e, 500);
-  }
-}
-
 const APP_DIST = path.join(__dirname, "app", "dist");
-const HAS_APP = fs.existsSync(path.join(APP_DIST, "index.html"));
+const APP_INDEX = path.join(APP_DIST, "index.html");
+const HAS_APP = fs.existsSync(APP_INDEX);
 
-if (HAS_APP) {
-  app.use("/assets", express.static(path.join(APP_DIST, "assets"), { etag: true, maxAge: "1y" }));
-  app.get("/", (_req, res) => {
-    res.set("Cache-Control", "no-store");
-    res.sendFile(path.join(APP_DIST, "index.html"));
-  });
-  app.get("/legacy", sendShell);
-} else {
-  app.get("/", sendShell);
+function sendApp(_req, res) {
+  if (!HAS_APP) {
+    return res.status(503).type("text").send("The web app is not built yet. Run: cd app && npm install && npm run build");
+  }
+  res.set("Cache-Control", "no-store");
+  res.sendFile(APP_INDEX);
 }
 
-app.get("/sw.js", (_req, res) => {
+app.use("/api", (_req, res) => res.status(404).json({ error: "Not found" }));
+
+app.use("/assets", express.static(path.join(APP_DIST, "assets"), { etag: true, maxAge: "1y", immutable: true }));
+
+app.get("/sw.js", (_req, res, next) => {
   res.set("Cache-Control", "no-store");
-  res.set("Service-Worker-Allowed", "/");
-  res.type("application/javascript").sendFile(path.join(PUBLIC_DIR, "sw.js"));
+  next();
 });
 
-app.get("/manifest.webmanifest", (_req, res) => {
+app.get("/manifest.webmanifest", (_req, res, next) => {
   res.set("Cache-Control", "no-cache");
-  res.type("application/manifest+json").sendFile(path.join(PUBLIC_DIR, "manifest.webmanifest"));
+  res.type("application/manifest+json");
+  next();
 });
 
-app.use(express.static(PUBLIC_DIR, { index: false, etag: true, maxAge: "1y" }));
-app.get(/.*/, (req, res) => {
-  if (HAS_APP && !req.path.startsWith("/legacy")) {
-    res.set("Cache-Control", "no-store");
-    return res.sendFile(path.join(APP_DIST, "index.html"));
-  }
-  return sendShell(req, res);
-});
+app.use(express.static(APP_DIST, { index: false, etag: true, maxAge: "1d" }));
+app.get(/.*/, sendApp);
 
 app.listen(PORT, HOST, () => {
   console.log(`claude-remote → http://${HOST}:${PORT}`);
-  console.log(`serving: ${HAS_APP ? "app/dist" : "public (legacy)"}`);
+  if (!HAS_APP) console.log("web app not built: run `cd app && npm install && npm run build`");
   if (TOKEN_SOURCE === "new") console.log(`token: ${TOKEN} (saved to ${TOKEN_FILE})`);
   else if (TOKEN_SOURCE === "file") console.log(`token: in ${TOKEN_FILE}`);
   else console.log("token: from CLAUDE_REMOTE_TOKEN");
