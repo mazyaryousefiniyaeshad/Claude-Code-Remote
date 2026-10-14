@@ -3,6 +3,7 @@ import busboy from "busboy";
 import compression from "compression";
 import fs from "node:fs";
 import fsp from "node:fs/promises";
+import http from "node:http";
 import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
@@ -24,24 +25,14 @@ import { listDir, readFileText, listPorts, safePath } from "./lib/files.js";
 import { listFavorites, setFavorite, favoriteIds, pruneFavorites } from "./lib/favorites.js";
 import { listSkills } from "./lib/skills.js";
 import { getUsage } from "./lib/usage.js";
-import { HOST, PORT, TOKEN_FILE, TOKEN_FROM_ENV, UPLOAD_ROOT } from "./lib/config.js";
+import { HOST, PORT, TOKEN_FILE, UPLOAD_ROOT } from "./lib/config.js";
+import { ensureToken } from "./lib/token.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 await fsp.mkdir(UPLOAD_ROOT, { recursive: true });
 
-async function loadToken() {
-  if (TOKEN_FROM_ENV) return { token: TOKEN_FROM_ENV, source: "env" };
-  try {
-    const t = (await fsp.readFile(TOKEN_FILE, "utf8")).trim();
-    if (t) return { token: t, source: "file" };
-  } catch {}
-  const t = crypto.randomBytes(18).toString("base64url");
-  await fsp.mkdir(path.dirname(TOKEN_FILE), { recursive: true });
-  await fsp.writeFile(TOKEN_FILE, t + "\n", { mode: 0o600 });
-  return { token: t, source: "new" };
-}
-const { token: TOKEN, source: TOKEN_SOURCE } = await loadToken();
+const { token: TOKEN, source: TOKEN_SOURCE } = ensureToken();
 
 const app = express();
 app.disable("x-powered-by");
@@ -315,10 +306,25 @@ app.get("/manifest.webmanifest", (_req, res, next) => {
 app.use(express.static(APP_DIST, { index: false, etag: true, maxAge: "1d" }));
 app.get(/.*/, sendApp);
 
-const server = app.listen(PORT, HOST, () => {
-  console.log(`cc-remote → http://${HOST}:${server.address().port}`);
-  if (!HAS_APP) console.log("web app not built: run `cd app && npm install && npm run build`");
-  if (TOKEN_SOURCE === "new") console.log(`token: ${TOKEN} (saved to ${TOKEN_FILE})`);
-  else if (TOKEN_SOURCE === "file") console.log(`token: in ${TOKEN_FILE}`);
-  else console.log("token: from CC_REMOTE_TOKEN");
-});
+function listen(attempt = 0) {
+  const server = http.createServer(app);
+  server.listen(PORT, HOST, () => {
+    console.log(`cc-remote → http://${HOST}:${server.address().port}`);
+    if (!HAS_APP) console.log("web app not built: run `cd app && npm install && npm run build`");
+    if (TOKEN_SOURCE === "new") console.log(`token: ${TOKEN} (saved to ${TOKEN_FILE})`);
+    else if (TOKEN_SOURCE === "file") console.log(`token: in ${TOKEN_FILE}`);
+    else console.log("token: from CC_REMOTE_TOKEN");
+  });
+  server.on("error", (error) => {
+    if (error.code === "EADDRNOTAVAIL" && attempt < 120) {
+      console.log(`${HOST} is not available yet, retrying in 5s`);
+      setTimeout(() => listen(attempt + 1), 5000);
+      return;
+    }
+    if (error.code === "EADDRINUSE") console.error(`Port ${PORT} is already in use. Pick another with: cc-remote setup`);
+    else console.error(error.message);
+    process.exit(1);
+  });
+}
+
+listen();
