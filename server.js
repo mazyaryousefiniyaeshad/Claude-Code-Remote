@@ -29,7 +29,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 61777);
 const HOST = process.env.HOST || "127.0.0.1";
 const UPLOAD_ROOT = path.join(os.homedir(), ".claude-remote", "uploads");
-const RUN_TIMEOUT_MS = Number(process.env.RUN_TIMEOUT_MS || 0);
 const TOKEN_FILE = path.join(os.homedir(), ".claude-remote", "token");
 
 await fsp.mkdir(UPLOAD_ROOT, { recursive: true });
@@ -153,13 +152,6 @@ app.get("/api/runs", (_req, res) => ok(res, { runs: listRuns() }));
 app.post("/api/run/:runId/permission", (req, res) => {
   const { id, decision } = req.body || {};
   const r = answerPermission(req.params.runId, id, decision);
-  if (!r.ok) return fail(res, new Error(r.error));
-  ok(res, r);
-});
-
-app.post("/api/run/:runId/answer", (req, res) => {
-  const { id, answers, cancel } = req.body || {};
-  const r = answerQuestion(req.params.runId, id, answers, !!cancel);
   if (!r.ok) return fail(res, new Error(r.error));
   ok(res, r);
 });
