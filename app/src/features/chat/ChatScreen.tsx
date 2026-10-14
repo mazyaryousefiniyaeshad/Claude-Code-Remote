@@ -52,6 +52,7 @@ export function ChatScreen() {
   const stickyRef = useRef(true);
   const ownRunRef = useRef(false);
   const attachedRef = useRef<Set<string>>(new Set());
+  const adoptedRef = useRef<string | null>(null);
   const cwdRef = useRef(cwd);
   cwdRef.current = cwd;
   const setParamsRef = useRef(setParams);
@@ -62,6 +63,7 @@ export function ChatScreen() {
     onSessionId: (id) => {
       setSessionId((current) => {
         if (current === id) return current;
+        if (!current) adoptedRef.current = id;
         setParamsRef.current({ cwd: cwdRef.current, session: id }, { replace: true });
         return id;
       });
@@ -82,6 +84,7 @@ export function ChatScreen() {
       setTotal(0);
       return;
     }
+    if (sessionParam === adoptedRef.current) return;
     setLoading(true);
     setError(null);
     fetchHistory(cwd, sessionParam)
