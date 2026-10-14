@@ -46,7 +46,7 @@ your plugins. They get added to your message automatically.
 You need Node 22 or newer and Claude Code already working on this machine.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-remote.git
+git clone https://github.com/mazyaryousefiniyaeshad/claude-remote.git
 cd claude-remote
 npm install
 cd app && npm install && npm run build && cd ..
@@ -89,7 +89,7 @@ Full guide, including what gets mounted and why: **[DOCKER.md](DOCKER.md)**
 
 ## Android
 
-There is an APK on the [releases page](../../releases). Install it, then enter
+There is an APK on the [releases page](https://github.com/mazyaryousefiniyaeshad/claude-remote/releases). Install it, then enter
 your server address and token on first launch.
 
 To build it yourself you need a JDK and the Android SDK:
