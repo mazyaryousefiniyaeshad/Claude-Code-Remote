@@ -13,8 +13,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -38,8 +38,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: Package
@@ -60,7 +60,20 @@ jobs:
         shell: bash
         run: |
           cli="$HOME/.local/bin/cc-remote"
-          if [ "$RUNNER_OS" = Windows ]; then cli="$(cygpath "$USERPROFILE")/.cc-remote/bin/cc-remote.cmd"; fi
+          data="$HOME/.cc-remote"
+          if [ "$RUNNER_OS" = Windows ]; then
+            data="$(cygpath "$USERPROFILE")/.cc-remote"
+            cli="$data/bin/cc-remote.cmd"
+          fi
+          report() {
+            { "$cli" status; echo "--- server.log"; tail -n 40 "$data/logs/server.log"; } > report.txt 2>&1 || true
+            echo "::error title=Diagnostics::$(awk '{printf "%s%%0A", $0}' report.txt)"
+          }
+          trap report ERR
+          set -e
+          if "$cli" status > before.txt 2>&1; then state=running; else state=stopped; fi
+          echo "::notice title=After install::the server was $state when this step began"
+          "$cli" start
           "$cli" status
           token=$("$cli" token | tr -d '\r')
           curl -fsS -H "Authorization: Bearer $token" http://127.0.0.1:61777/api/health
