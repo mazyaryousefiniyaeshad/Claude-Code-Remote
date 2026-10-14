@@ -13,6 +13,7 @@ Edit `.env`:
 ```
 CR_TOKEN=<a long random string you invent>
 CR_PORT=61777
+CR_BIND=127.0.0.1
 CR_WORKSPACE=/Users/you/Projects
 CR_CLAUDE_DIR=/Users/you/.claude
 CR_DATA_DIR=/Users/you/.claude-remote
@@ -24,7 +25,10 @@ Then:
 docker compose up -d
 ```
 
-Open `http://<this-machine>:61777` and paste `CR_TOKEN`.
+Open `http://localhost:61777` and paste `CR_TOKEN`.
+
+To reach it from your phone, set `CR_BIND=0.0.0.0` (or your Tailscale IP) and use
+`http://<this-machine>:61777` instead.
 
 ## What gets mounted and why
 

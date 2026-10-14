@@ -27,7 +27,7 @@ import { getUsage } from "./lib/usage.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 61777);
-const HOST = process.env.HOST || "0.0.0.0";
+const HOST = process.env.HOST || "127.0.0.1";
 const UPLOAD_ROOT = path.join(os.homedir(), ".claude-remote", "uploads");
 const RUN_TIMEOUT_MS = Number(process.env.RUN_TIMEOUT_MS || 0);
 const TOKEN_FILE = path.join(os.homedir(), ".claude-remote", "token");

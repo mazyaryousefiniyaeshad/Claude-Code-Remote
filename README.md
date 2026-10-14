@@ -119,7 +119,7 @@ Everything is optional.
 | Variable | Default | What it does |
 |---|---|---|
 | `PORT` | `61777` | Port to listen on |
-| `HOST` | `0.0.0.0` | Bind address |
+| `HOST` | `127.0.0.1` | Bind address; `0.0.0.0` to reach it from other devices |
 | `CLAUDE_REMOTE_TOKEN` | generated | Access token; saved to `~/.claude-remote/token` if unset |
 | `CR_ALLOWED_ROOTS` | `$HOME` | Extra folders Claude may reach, colon separated |
 | `PERMISSION_TIMEOUT_MS` | `1800000` | How long a question waits before it gives up |

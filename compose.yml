@@ -5,7 +5,7 @@ services:
     container_name: claude-remote
     restart: unless-stopped
     ports:
-      - "${CR_PORT:-61777}:61777"
+      - "${CR_BIND:-127.0.0.1}:${CR_PORT:-61777}:61777"
     environment:
       PORT: "61777"
       HOST: "0.0.0.0"
