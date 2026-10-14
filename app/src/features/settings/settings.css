@@ -79,6 +79,23 @@
   background: var(--fault-wash);
 }
 
+.field-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--tap);
+  border-radius: var(--r-control);
+  background: var(--panel);
+  color: var(--ink);
+  font-size: var(--t-body);
+  text-decoration: none;
+}
+
+.field-link:active {
+  background: var(--raised);
+}
+
 .field-hint {
   font-size: var(--t-caption);
   color: var(--ink-4);

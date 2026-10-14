@@ -4,9 +4,12 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "./App";
 import { readFontScale, readTheme } from "./lib/storage";
+import { consumePairingHash } from "./lib/pairing";
 import "antd-mobile/es/global";
 import "./styles/tokens.css";
 import "./styles/base.css";
+
+consumePairingHash();
 
 const root = document.documentElement;
 root.dataset.theme =

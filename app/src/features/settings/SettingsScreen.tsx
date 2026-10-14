@@ -12,7 +12,10 @@ import {
   writeToken,
   type EnterMode,
 } from "../../lib/storage";
+import { Capacitor } from "@capacitor/core";
 import "./settings.css";
+
+const ANDROID_APP_URL = "https://github.com/mazyaryousefiniyaeshad/cc-remote/releases/latest/download/cc-remote.apk";
 
 export function SettingsScreen() {
   const [theme, setTheme] = useState(() => readTheme() ?? document.documentElement.dataset.theme ?? "dark");
@@ -97,6 +100,16 @@ export function SettingsScreen() {
           />
           <p className="field-hint">Leave empty when the app is served by the server itself.</p>
         </section>
+
+        {Capacitor.isNativePlatform() ? null : (
+          <section className="field">
+            <h2>Android app</h2>
+            <a className="field-link" href={ANDROID_APP_URL} target="_blank" rel="noreferrer">
+              Download the app
+            </a>
+            <p className="field-hint">Open it, then paste the link from <code>cc-remote pair</code>.</p>
+          </section>
+        )}
 
         <section className="field">
           <h2>Session</h2>

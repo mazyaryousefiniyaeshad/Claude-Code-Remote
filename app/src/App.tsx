@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { readToken } from "./lib/storage";
+import { SIGNED_OUT } from "./api/client";
 import { SignIn } from "./features/auth/SignIn";
 import { HomeScreen } from "./features/home/HomeScreen";
 import { ChatScreen } from "./features/chat/ChatScreen";
@@ -11,6 +12,12 @@ import { SettingsScreen } from "./features/settings/SettingsScreen";
 
 export function App() {
   const [token, setToken] = useState(() => readToken());
+
+  useEffect(() => {
+    const onSignedOut = () => setToken(null);
+    window.addEventListener(SIGNED_OUT, onSignedOut);
+    return () => window.removeEventListener(SIGNED_OUT, onSignedOut);
+  }, []);
 
   if (!token) return <SignIn onSignedIn={() => setToken(readToken())} />;
 

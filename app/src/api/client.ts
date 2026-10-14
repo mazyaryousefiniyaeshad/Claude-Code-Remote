@@ -1,4 +1,6 @@
-import { readServer, readToken } from "../lib/storage";
+import { readServer, readToken, writeToken } from "../lib/storage";
+
+export const SIGNED_OUT = "cc-remote:signed-out";
 
 function base(): string {
   const raw = readServer().trim();
@@ -31,6 +33,10 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   });
 
   const payload = await res.json().catch(() => null);
+  if (res.status === 401 && token) {
+    writeToken(null);
+    window.dispatchEvent(new Event(SIGNED_OUT));
+  }
   if (!res.ok) {
     const message =
       (payload && typeof payload === "object" && "error" in payload

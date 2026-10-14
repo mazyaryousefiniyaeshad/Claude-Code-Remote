@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Input } from "antd-mobile";
 import { Capacitor } from "@capacitor/core";
 import { readServer, writeServer, writeToken } from "../../lib/storage";
+import { parsePairing } from "../../lib/pairing";
 import "./signin.css";
 
 export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
@@ -11,12 +12,12 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  const submit = async () => {
-    const trimmedToken = token.trim();
+  const connect = async (nextServer: string, nextToken: string) => {
+    const trimmedToken = nextToken.trim();
     if (!trimmedToken) return;
     setBusy(true);
     setError(null);
-    writeServer(server.trim());
+    writeServer(nextServer.trim());
     writeToken(trimmedToken);
     try {
       const { api } = await import("../../api/client");
@@ -30,6 +31,15 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
     }
   };
 
+  const take = (value: string, apply: (value: string) => void) => {
+    const pairing = parsePairing(value);
+    if (!pairing) return apply(value);
+    const nextServer = native || pairing.server !== window.location.origin ? pairing.server : "";
+    setServer(nextServer);
+    setToken(pairing.token);
+    void connect(nextServer, pairing.token);
+  };
+
   return (
     <div className="signin">
       <div className="signin-card">
@@ -38,11 +48,11 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
 
         {native || server ? (
           <label className="signin-field">
-            <span>Server address</span>
+            <span>Pairing link or server address</span>
             <Input
-              placeholder="192.168.1.10:61777"
+              placeholder="http://192.168.1.10:61777/#pair=…"
               value={server}
-              onChange={setServer}
+              onChange={(value) => take(value, setServer)}
               clearable
             />
           </label>
@@ -54,14 +64,14 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
             type="password"
             placeholder="Paste token"
             value={token}
-            onChange={setToken}
-            onEnterPress={submit}
+            onChange={(value) => take(value, setToken)}
+            onEnterPress={() => connect(server, token)}
           />
         </label>
 
         {error ? <p className="signin-error">{error}</p> : null}
 
-        <Button block color="primary" loading={busy} onClick={submit} disabled={!token.trim()}>
+        <Button block color="primary" loading={busy} onClick={() => connect(server, token)} disabled={!token.trim()}>
           Connect
         </Button>
 
@@ -72,7 +82,7 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
         ) : null}
 
         <p className="signin-hint">
-          Run <code>cc-remote pair</code> on that machine to see the address and token.
+          Run <code>cc-remote pair</code> on that machine to see the link, address and token.
         </p>
       </div>
     </div>
