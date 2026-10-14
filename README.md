@@ -54,8 +54,14 @@ Lost it? Run `cc-remote pair` to see it again.
 **Android app.** Download [`cc-remote.apk`](https://github.com/mazyaryousefiniyaeshad/Claude-Code-Remote/releases/latest/download/cc-remote.apk),
 open it, and paste the link that `cc-remote pair` shows.
 
-**iPhone.** Open the link in Safari, then Share → Add to Home Screen. Open it from
-the Home Screen and paste the token once; `cc-remote pair` shows it.
+**iPhone and iPad.** There is no App Store app. The web app works the same way and
+can sit on your Home Screen like one:
+
+1. Scan the QR code with the Camera app. It opens in Safari, already signed in.
+2. Tap Share → **Add to Home Screen**.
+3. Open it from the Home Screen. It opens full screen, but iOS keeps its storage
+   apart from Safari, so it asks for the token once. Paste the token that
+   `cc-remote pair` shows.
 
 Your phone must be able to reach the machine:
 
