@@ -29,7 +29,7 @@ export function HomeScreen() {
 
   return (
     <Screen
-      title="Claude Remote"
+      title="Remote for Claude Code"
       actions={
         <>
           <button className="icon-btn" aria-label="Open ports" onClick={() => navigate("/ports")}>

@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 ENV NODE_ENV=production \
-    PORT=61777 \
-    HOST=0.0.0.0 \
+    CC_REMOTE_PORT=61777 \
+    CC_REMOTE_HOST=0.0.0.0 \
     CLAUDE_CONFIG_DIR=/home/node/.claude
 
 WORKDIR /srv
@@ -31,13 +31,13 @@ COPY server.js ./
 COPY lib ./lib
 COPY --from=web /build/app/dist ./app/dist
 
-RUN mkdir -p /home/node/.claude-remote/uploads /home/node/.claude-remote/logs \
+RUN mkdir -p /home/node/.cc-remote/uploads /home/node/.cc-remote/logs \
     && chown -R node:node /srv /home/node
 
 USER node
 EXPOSE 61777
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||61777)+'/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.CC_REMOTE_PORT||61777)+'/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
 CMD ["node", "server.js"]

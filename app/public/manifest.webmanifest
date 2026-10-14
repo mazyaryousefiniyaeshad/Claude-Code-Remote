@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Claude Remote",
-  "short_name": "Claude",
-  "description": "Drive Claude Code from your phone over Tailscale.",
+  "name": "Remote for Claude Code",
+  "short_name": "CC Remote",
+  "description": "Use Claude Code from your phone.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

@@ -24,17 +24,14 @@ import { listDir, readFileText, listPorts, safePath } from "./lib/files.js";
 import { listFavorites, setFavorite, favoriteIds, pruneFavorites } from "./lib/favorites.js";
 import { listSkills } from "./lib/skills.js";
 import { getUsage } from "./lib/usage.js";
+import { HOST, PORT, TOKEN_FILE, TOKEN_FROM_ENV, UPLOAD_ROOT } from "./lib/config.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = Number(process.env.PORT || 61777);
-const HOST = process.env.HOST || "127.0.0.1";
-const UPLOAD_ROOT = path.join(os.homedir(), ".claude-remote", "uploads");
-const TOKEN_FILE = path.join(os.homedir(), ".claude-remote", "token");
 
 await fsp.mkdir(UPLOAD_ROOT, { recursive: true });
 
 async function loadToken() {
-  if (process.env.CLAUDE_REMOTE_TOKEN) return { token: process.env.CLAUDE_REMOTE_TOKEN, source: "env" };
+  if (TOKEN_FROM_ENV) return { token: TOKEN_FROM_ENV, source: "env" };
   try {
     const t = (await fsp.readFile(TOKEN_FILE, "utf8")).trim();
     if (t) return { token: t, source: "file" };
@@ -319,9 +316,9 @@ app.use(express.static(APP_DIST, { index: false, etag: true, maxAge: "1d" }));
 app.get(/.*/, sendApp);
 
 const server = app.listen(PORT, HOST, () => {
-  console.log(`claude-remote → http://${HOST}:${server.address().port}`);
+  console.log(`cc-remote → http://${HOST}:${server.address().port}`);
   if (!HAS_APP) console.log("web app not built: run `cd app && npm install && npm run build`");
   if (TOKEN_SOURCE === "new") console.log(`token: ${TOKEN} (saved to ${TOKEN_FILE})`);
   else if (TOKEN_SOURCE === "file") console.log(`token: in ${TOKEN_FILE}`);
-  else console.log("token: from CLAUDE_REMOTE_TOKEN");
+  else console.log("token: from CC_REMOTE_TOKEN");
 });

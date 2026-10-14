@@ -33,7 +33,7 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
   return (
     <div className="signin">
       <div className="signin-card">
-        <h1>Claude Remote</h1>
+        <h1>Remote for Claude Code</h1>
         <p className="signin-lead">Connect to the server running on your machine.</p>
 
         {native || server ? (
@@ -71,7 +71,9 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
           </button>
         ) : null}
 
-        <p className="signin-hint">Find the token in ~/.claude-remote/token</p>
+        <p className="signin-hint">
+          Run <code>cc-remote pair</code> on that machine to see the address and token.
+        </p>
       </div>
     </div>
   );

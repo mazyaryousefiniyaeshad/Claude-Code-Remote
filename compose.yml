@@ -1,18 +1,18 @@
 services:
-  claude-remote:
+  cc-remote:
     build: .
-    image: claude-remote:latest
-    container_name: claude-remote
+    image: cc-remote:latest
+    container_name: cc-remote
     restart: unless-stopped
     ports:
-      - "${CR_BIND:-127.0.0.1}:${CR_PORT:-61777}:61777"
+      - "${CC_REMOTE_BIND:-127.0.0.1}:${CC_REMOTE_PORT:-61777}:61777"
     environment:
-      PORT: "61777"
-      HOST: "0.0.0.0"
+      CC_REMOTE_PORT: "61777"
+      CC_REMOTE_HOST: "0.0.0.0"
       CLAUDE_CONFIG_DIR: /home/node/.claude
-      CLAUDE_REMOTE_TOKEN: "${CR_TOKEN:?set CR_TOKEN in .env}"
-      CR_ALLOWED_ROOTS: "${CR_WORKSPACE}"
+      CC_REMOTE_TOKEN: "${CC_REMOTE_TOKEN:?set CC_REMOTE_TOKEN in .env}"
+      CC_REMOTE_ROOTS: "${CC_REMOTE_WORKSPACE}"
     volumes:
-      - "${CR_CLAUDE_DIR}:/home/node/.claude"
-      - "${CR_DATA_DIR}:/home/node/.claude-remote"
-      - "${CR_WORKSPACE}:${CR_WORKSPACE}"
+      - "${CC_REMOTE_CLAUDE_DIR}:/home/node/.claude"
+      - "${CC_REMOTE_DATA_DIR}:/home/node/.cc-remote"
+      - "${CC_REMOTE_WORKSPACE}:${CC_REMOTE_WORKSPACE}"

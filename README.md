@@ -1,4 +1,4 @@
-# Claude Remote
+# Remote for Claude Code
 
 Use Claude Code from your phone.
 
@@ -46,14 +46,14 @@ your plugins. They get added to your message automatically.
 You need Node 22 or newer and Claude Code already working on this machine.
 
 ```bash
-git clone https://github.com/mazyaryousefiniyaeshad/claude-remote.git
-cd claude-remote
+git clone https://github.com/mazyaryousefiniyaeshad/cc-remote.git
+cd cc-remote
 npm install
 cd app && npm install && npm run build && cd ..
 node server.js
 ```
 
-The first run prints an access token and saves it to `~/.claude-remote/token`.
+The first run prints an access token and saves it to `~/.cc-remote/token`.
 
 Open `http://localhost:61777` and paste the token.
 
@@ -62,7 +62,7 @@ Open `http://localhost:61777` and paste the token.
 Bind to the network instead of just localhost:
 
 ```bash
-HOST=0.0.0.0 node server.js
+CC_REMOTE_HOST=0.0.0.0 node server.js
 ```
 
 Then open `http://<your-machine-ip>:61777` from any device on the same network.
@@ -89,7 +89,7 @@ Full guide, including what gets mounted and why: **[DOCKER.md](DOCKER.md)**
 
 ## Android
 
-There is an APK on the [releases page](https://github.com/mazyaryousefiniyaeshad/claude-remote/releases). Install it, then enter
+There is an APK on the [releases page](https://github.com/mazyaryousefiniyaeshad/cc-remote/releases). Install it, then enter
 your server address and token on first launch.
 
 To build it yourself you need a JDK and the Android SDK:
@@ -118,10 +118,10 @@ Everything is optional.
 
 | Variable | Default | What it does |
 |---|---|---|
-| `PORT` | `61777` | Port to listen on |
-| `HOST` | `127.0.0.1` | Bind address; `0.0.0.0` to reach it from other devices |
-| `CLAUDE_REMOTE_TOKEN` | generated | Access token; saved to `~/.claude-remote/token` if unset |
-| `CR_ALLOWED_ROOTS` | `$HOME` | Extra folders Claude may reach, colon separated |
+| `CC_REMOTE_PORT` | `61777` | Port to listen on |
+| `CC_REMOTE_HOST` | `127.0.0.1` | Bind address; `0.0.0.0` to reach it from other devices |
+| `CC_REMOTE_TOKEN` | generated | Access token; saved to `~/.cc-remote/token` if unset |
+| `CC_REMOTE_ROOTS` | none | Extra folders Claude may reach, besides your home folder; `:` separated (`;` on Windows) |
 | `PERMISSION_TIMEOUT_MS` | `1800000` | How long a question waits before it gives up |
 | `USAGE_TTL_MS` | `60000` | How long the plan-usage number is cached |
 
@@ -156,7 +156,7 @@ parsed question to your phone, and returns your answer through the one channel
 ## Security
 
 - Every `/api/*` route needs a bearer token, compared in constant time
-- File browsing is limited to `$HOME` plus anything in `CR_ALLOWED_ROOTS`
+- File browsing is limited to `$HOME` plus anything in `CC_REMOTE_ROOTS`
 - The token file is `chmod 600`
 - Nothing is exposed beyond the network you bind to
 
@@ -233,3 +233,10 @@ from the actual characters, so mixed content works.
 ## Licence
 
 MIT
+
+<br>
+
+---
+
+Remote for Claude Code is a community project. It is not made by, affiliated with, or
+endorsed by Anthropic. Claude and Claude Code are trademarks of Anthropic, PBC.

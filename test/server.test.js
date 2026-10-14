@@ -34,7 +34,7 @@ before(async () => {
 
   child = spawn(process.execPath, ["server.js"], {
     cwd: ROOT,
-    env: { ...process.env, HOME: home, USERPROFILE: home, PORT: "0", HOST: "127.0.0.1", CLAUDE_REMOTE_TOKEN: TOKEN, CR_ALLOWED_ROOTS: "" },
+    env: { ...process.env, HOME: home, USERPROFILE: home, CC_REMOTE_PORT: "0", CC_REMOTE_HOST: "127.0.0.1", CC_REMOTE_TOKEN: TOKEN, CC_REMOTE_ROOTS: "" },
     stdio: ["ignore", "pipe", "pipe"],
   });
   base = await new Promise((resolve, reject) => {

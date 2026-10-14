@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: process.env.CR_APP_ID ?? "dev.claude.remote",
-  appName: process.env.CR_APP_NAME ?? "Claude Remote",
+  appId: process.env.CC_REMOTE_APP_ID ?? "io.github.mazyaryousefiniyaeshad.ccremote",
+  appName: process.env.CC_REMOTE_APP_NAME ?? "CC Remote",
   webDir: "dist",
   android: {
     allowMixedContent: true,
