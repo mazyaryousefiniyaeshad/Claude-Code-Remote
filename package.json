@@ -5,12 +5,16 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.267",
     "busboy": "^1.6.0",
     "compression": "^1.8.1",
     "express": "^5.2.1"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

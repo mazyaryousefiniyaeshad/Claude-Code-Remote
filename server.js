@@ -318,8 +318,8 @@ app.get("/manifest.webmanifest", (_req, res, next) => {
 app.use(express.static(APP_DIST, { index: false, etag: true, maxAge: "1d" }));
 app.get(/.*/, sendApp);
 
-app.listen(PORT, HOST, () => {
-  console.log(`claude-remote → http://${HOST}:${PORT}`);
+const server = app.listen(PORT, HOST, () => {
+  console.log(`claude-remote → http://${HOST}:${server.address().port}`);
   if (!HAS_APP) console.log("web app not built: run `cd app && npm install && npm run build`");
   if (TOKEN_SOURCE === "new") console.log(`token: ${TOKEN} (saved to ${TOKEN_FILE})`);
   else if (TOKEN_SOURCE === "file") console.log(`token: in ${TOKEN_FILE}`);
