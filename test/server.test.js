@@ -32,8 +32,16 @@ before(async () => {
   ];
   fs.writeFileSync(path.join(projectDir, `${sessionId}.jsonl`), lines.map((line) => JSON.stringify(line)).join("\n") + "\n");
 
+  const install = path.join(home, ".cc-remote", "app");
+  fs.mkdirSync(path.join(install, "app", "dist"), { recursive: true });
+  for (const name of ["server.js", "lib", "package.json"]) {
+    fs.cpSync(path.join(ROOT, name), path.join(install, name), { recursive: true });
+  }
+  fs.symlinkSync(path.join(ROOT, "node_modules"), path.join(install, "node_modules"), "junction");
+  fs.writeFileSync(path.join(install, "app", "dist", "index.html"), '<div id="root"></div>');
+
   child = spawn(process.execPath, ["server.js"], {
-    cwd: ROOT,
+    cwd: install,
     env: { ...process.env, HOME: home, USERPROFILE: home, CC_REMOTE_PORT: "0", CC_REMOTE_HOST: "127.0.0.1", CC_REMOTE_TOKEN: TOKEN, CC_REMOTE_ROOTS: "" },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -112,6 +120,14 @@ test("reports a missing session cleanly", async () => {
   assert.equal((await res.json()).error, "Session not found");
   const traversal = await get(`/api/history?cwd=${encodeURIComponent(project)}&sessionId=..%2F..%2Fx`);
   assert.equal((await traversal.json()).error, "Session not found");
+});
+
+test("serves the web app from an install inside a dot folder", async () => {
+  for (const url of ["/", "/chat?cwd=x"]) {
+    const res = await fetch(base + url);
+    assert.equal(res.status, 200);
+    assert.match(await res.text(), /<div id="root">/);
+  }
 });
 
 test("unknown API routes return 404 JSON", async () => {

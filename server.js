@@ -285,7 +285,7 @@ function sendApp(_req, res) {
     return res.status(503).type("text").send("The web app is not built yet. Run: cd app && npm install && npm run build");
   }
   res.set("Cache-Control", "no-store");
-  res.sendFile(APP_INDEX);
+  res.sendFile(APP_INDEX, { dotfiles: "allow" });
 }
 
 app.use("/api", (_req, res) => res.status(404).json({ error: "Not found" }));
