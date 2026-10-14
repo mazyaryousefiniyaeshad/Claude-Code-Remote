@@ -10,14 +10,14 @@ interface Props {
 }
 
 export function RunStatusBar({ startedAt, lastEventAt, waiting, onStop }: Props) {
-  const [, tick] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
-    const id = window.setInterval(() => tick((value) => value + 1), 1000);
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  const quiet = lastEventAt ? Math.floor((Date.now() - lastEventAt) / 1000) : 0;
+  const quiet = lastEventAt ? Math.max(0, Math.floor((now - lastEventAt) / 1000)) : 0;
 
   return (
     <div className={`run-bar${waiting ? " is-waiting" : ""}`} role="status">
@@ -27,7 +27,7 @@ export function RunStatusBar({ startedAt, lastEventAt, waiting, onStop }: Props)
       </span>
       {!waiting ? (
         <span className="run-bar-clock num">
-          {elapsed(startedAt)}
+          {elapsed(startedAt, now)}
           {quiet > 5 ? ` · quiet ${quiet}s` : ""}
         </span>
       ) : null}

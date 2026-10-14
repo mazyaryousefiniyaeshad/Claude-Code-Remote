@@ -30,20 +30,31 @@ export function FilePreview({ file, onClose }: { file: Attachment | null; onClos
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
 
+  const [shownPath, setShownPath] = useState<string | null>(null);
+
   const isImage = Boolean(file && IMAGE.test(file.mime ?? ""));
   const isText = Boolean(file && !isImage && TEXTUAL.test(file.name));
+  const filePath = file?.path ?? null;
 
-  useEffect(() => {
+  if (filePath !== shownPath) {
+    setShownPath(filePath);
     setText(null);
     setFailed(false);
-    if (!file || !isText) return;
-    setLoading(true);
+    setLoading(Boolean(filePath && isText));
+  }
+
+  useEffect(() => {
+    if (!filePath || !isText) return;
+    let cancelled = false;
     api
-      .get<{ text: string; truncated: boolean }>(`/file?path=${encodeURIComponent(file.path)}`)
-      .then((result) => setText(result.text.slice(0, 20000)))
-      .catch(() => setFailed(true))
-      .finally(() => setLoading(false));
-  }, [file, isText]);
+      .get<{ text: string; truncated: boolean }>(`/file?path=${encodeURIComponent(filePath)}`)
+      .then((result) => !cancelled && setText(result.text.slice(0, 20000)))
+      .catch(() => !cancelled && setFailed(true))
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, [filePath, isText]);
 
   if (!file) return null;
 

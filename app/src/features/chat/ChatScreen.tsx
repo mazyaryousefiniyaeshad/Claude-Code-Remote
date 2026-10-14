@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Screen } from "../../components/Screen";
 import { Empty, Loading, ErrorNote } from "../../components/Primitives";
@@ -9,7 +9,6 @@ import { PermissionCard, QuestionCard } from "./PromptCards";
 import { RunStatusBar } from "./RunStatusBar";
 import { useRunStream } from "../../api/useRunStream";
 import {
-  HISTORY_PAGE,
   answerPermission,
   answerQuestion,
   enqueueMessage,
@@ -23,7 +22,6 @@ import type { Attachment, Message, MessagePart } from "../../api/types";
 import { readRunOptions, writeActiveRun } from "../../lib/storage";
 import { RunChips } from "./RunChips";
 import { SkillPicker } from "./SkillPicker";
-import { basename } from "../../lib/format";
 import "./chat.css";
 
 function trimInFlight(messages: Message[]): Message[] {
@@ -39,6 +37,8 @@ export function ChatScreen() {
   const runParam = params.get("run") || null;
 
   const [sessionId, setSessionId] = useState(sessionParam);
+  const [adopted, setAdopted] = useState<string | null>(null);
+  const [historyKey, setHistoryKey] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [offset, setOffset] = useState(0);
   const [total, setTotal] = useState(0);
@@ -52,21 +52,22 @@ export function ChatScreen() {
   const stickyRef = useRef(true);
   const ownRunRef = useRef(false);
   const attachedRef = useRef<Set<string>>(new Set());
-  const adoptedRef = useRef<string | null>(null);
+  const sessionIdRef = useRef(sessionParam);
   const cwdRef = useRef(cwd);
-  cwdRef.current = cwd;
   const setParamsRef = useRef(setParams);
-  setParamsRef.current = setParams;
+  useLayoutEffect(() => {
+    cwdRef.current = cwd;
+    setParamsRef.current = setParams;
+  });
   const runs = useRuns(0);
 
   const stream = useRunStream({
     onSessionId: (id) => {
-      setSessionId((current) => {
-        if (current === id) return current;
-        if (!current) adoptedRef.current = id;
-        setParamsRef.current({ cwd: cwdRef.current, session: id }, { replace: true });
-        return id;
-      });
+      if (sessionIdRef.current === id) return;
+      if (!sessionIdRef.current) setAdopted(id);
+      sessionIdRef.current = id;
+      setSessionId(id);
+      setParamsRef.current({ cwd: cwdRef.current, session: id }, { replace: true });
     },
     onTurn: (parts: MessagePart[]) => {
       if (parts.length) setMessages((current) => [...current, { role: "assistant", parts }]);
@@ -76,17 +77,22 @@ export function ChatScreen() {
     },
   });
 
-  useEffect(() => {
-    let cancelled = false;
+  const wantedKey = sessionParam ? `${cwd}\n${sessionParam}` : null;
+  if (wantedKey !== historyKey) {
+    setHistoryKey(wantedKey);
     if (!sessionParam) {
       setMessages([]);
       setOffset(0);
       setTotal(0);
-      return;
+    } else if (sessionParam !== adopted) {
+      setLoading(true);
+      setError(null);
     }
-    if (sessionParam === adoptedRef.current) return;
-    setLoading(true);
-    setError(null);
+  }
+
+  useEffect(() => {
+    if (!sessionParam || sessionParam === adopted) return;
+    let cancelled = false;
     fetchHistory(cwd, sessionParam)
       .then((history) => {
         if (cancelled) return;
@@ -99,7 +105,7 @@ export function ChatScreen() {
     return () => {
       cancelled = true;
     };
-  }, [cwd, sessionParam]);
+  }, [cwd, sessionParam, adopted]);
 
   const attach = stream.attach;
   const activeRunId = stream.runId;
@@ -172,7 +178,10 @@ export function ChatScreen() {
 
     try {
       const started = await startRun({ cwd, sessionId, prompt: body, options });
-      if (started.sessionId && started.sessionId !== sessionId) setSessionId(started.sessionId);
+      if (started.sessionId && started.sessionId !== sessionId) {
+        sessionIdRef.current = started.sessionId;
+        setSessionId(started.sessionId);
+      }
       writeActiveRun({ runId: started.runId, sessionId: started.sessionId, cwd });
       ownRunRef.current = true;
       attachedRef.current.add(started.runId);
@@ -310,5 +319,3 @@ export function ChatScreen() {
   );
 }
 
-export const chatTitleFor = (cwd: string) => basename(cwd);
-export const HISTORY_SIZE = HISTORY_PAGE;

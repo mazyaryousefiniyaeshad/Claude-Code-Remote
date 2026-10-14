@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { authHeaders, streamUrl } from "./client";
 import { openEventStream, type EventStream } from "./eventStream";
 import type { MessagePart, Pending, QueuedMessage, ToolResult } from "./types";
@@ -56,7 +56,9 @@ export function useRunStream(handlers: StreamHandlers = {}) {
   const consumedRef = useRef(0);
   const liveRef = useRef<LiveState | null>(null);
   const handlersRef = useRef(handlers);
-  handlersRef.current = handlers;
+  useLayoutEffect(() => {
+    handlersRef.current = handlers;
+  });
 
   const detach = useCallback(() => {
     sourceRef.current?.close();
@@ -74,7 +76,7 @@ export function useRunStream(handlers: StreamHandlers = {}) {
   }, []);
 
   const connect = useCallback(
-    (id: string, from: number) => {
+    function open(id: string, from: number) {
       const onData = (data: string) => {
         consumedRef.current += 1;
         const current = liveRef.current;
@@ -207,7 +209,7 @@ export function useRunStream(handlers: StreamHandlers = {}) {
         if (sourceRef.current !== source) return;
         sourceRef.current = null;
         window.setTimeout(() => {
-          if (liveRef.current) connect(id, consumedRef.current);
+          if (liveRef.current) open(id, consumedRef.current);
         }, 1500);
       };
 

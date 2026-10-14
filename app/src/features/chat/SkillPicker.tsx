@@ -25,7 +25,7 @@ export function SkillPicker({ cwd, selected, onChange }: Props) {
   const [tag, setTag] = useState<string | null>(null);
   const query = useSkills(open ? cwd : null);
 
-  const all = query.data?.skills ?? [];
+  const all = useMemo(() => query.data?.skills ?? [], [query.data]);
   const tags = query.data?.tags ?? [];
 
   const visible = useMemo(() => {
