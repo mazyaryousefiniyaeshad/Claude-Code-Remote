@@ -153,6 +153,7 @@ export interface Usage {
   sevenDay?: UsageWindow | null;
   limits?: UsageLimit[];
   fetchedAt?: number;
+  error?: string;
 }
 
 export interface Attachment {

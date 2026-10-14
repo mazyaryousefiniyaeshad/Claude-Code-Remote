@@ -46,7 +46,7 @@ export function RunChips({ model, mode, effort, onChange }: Props) {
         {effortOf(effort).short}
       </button>
 
-      {usage.data ? (
+      {usage.data && !usage.data.error ? (
         <button
           className={`chip${percent !== null && percent >= 85 ? " is-hot" : percent !== null && percent >= 60 ? " is-warm" : ""}`}
           onClick={() => setSheet("usage")}
