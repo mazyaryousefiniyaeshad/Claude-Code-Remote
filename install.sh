@@ -105,10 +105,10 @@ say "Installing..."
 mkdir -p "$DATA_DIR"
 rm -rf "$APP_DIR.new"
 mv "$src" "$APP_DIR.new"
-(cd "$APP_DIR.new" && npm ci --omit=dev --no-audit --no-fund --loglevel=error)
+(cd "$APP_DIR.new" && npm ci --omit=dev --no-audit --no-fund --no-update-notifier --loglevel=error >/dev/null)
 if [ "$prebuilt" = 0 ]; then
   say "Building the web app..."
-  (cd "$APP_DIR.new/app" && npm ci --no-audit --no-fund --loglevel=error && npm run build >/dev/null && rm -rf node_modules)
+  (cd "$APP_DIR.new/app" && npm ci --no-audit --no-fund --no-update-notifier --loglevel=error >/dev/null && npm run build >/dev/null && rm -rf node_modules)
 fi
 rm -rf "$APP_DIR"
 mv "$APP_DIR.new" "$APP_DIR"

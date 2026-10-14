@@ -29,3 +29,40 @@ jobs:
         working-directory: app
       - run: npm run build
         working-directory: app
+
+  install:
+    needs: test
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Package
+        shell: bash
+        run: ./scripts/package.sh
+      - name: Install on macOS and Linux
+        if: runner.os != 'Windows'
+        env:
+          CC_REMOTE_SOURCE: ${{ github.workspace }}/dist/cc-remote.tgz
+        run: sh ./install.sh --network --yes
+      - name: Install on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          CC_REMOTE_SOURCE: ${{ github.workspace }}\dist\cc-remote.tgz
+        run: ./install.ps1 --network --yes
+      - name: Check that it answers
+        shell: bash
+        run: |
+          cli="$HOME/.local/bin/cc-remote"
+          if [ "$RUNNER_OS" = Windows ]; then cli="$(cygpath "$USERPROFILE")/.cc-remote/bin/cc-remote.cmd"; fi
+          "$cli" status
+          token=$("$cli" token | tr -d '\r')
+          curl -fsS -H "Authorization: Bearer $token" http://127.0.0.1:61777/api/health
+          curl -fsS -o /dev/null http://127.0.0.1:61777/
+          "$cli" uninstall --purge
