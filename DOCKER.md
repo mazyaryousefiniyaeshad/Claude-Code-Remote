@@ -37,17 +37,18 @@ To reach it from your phone, set `CR_BIND=0.0.0.0` (or your Tailscale IP) and us
 | `~/.claude` | Your credentials, session transcripts, skills, settings |
 | `~/.claude.json` | Claude's own config file — it lives beside the folder, not inside it |
 | `~/.claude-remote` | Uploads, favourites, logs |
-| `CR_WORKSPACE` | The only project tree Claude can read or write |
+| `CR_WORKSPACE` | The project tree Claude works in |
 
 The workspace is mounted at the **same absolute path** inside the container. That
 keeps every path Claude prints copy-pasteable on the host.
 
 ## Isolation
 
-`CR_ALLOWED_ROOTS` limits the file browser and every run's `cwd` to the workspace
-you mounted. Claude cannot reach anything else on the host, because nothing else is
-mounted. That is a real improvement over running the server directly on the host,
-where the whole home directory is reachable.
+The file browser and every run's `cwd` can reach the container's home directory
+(which holds the mounted `~/.claude` and `~/.claude-remote`) plus the workspace, which
+`CR_ALLOWED_ROOTS` adds. Claude cannot reach anything else on the host, because
+nothing else is mounted. That is a real improvement over running the server directly
+on the host, where your whole home directory is reachable.
 
 It is **not** a sandbox against a determined attacker who already has your token.
 Inside the workspace, Claude runs arbitrary commands by design.
