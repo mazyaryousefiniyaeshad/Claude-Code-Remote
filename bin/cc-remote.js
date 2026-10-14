@@ -4,7 +4,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import readline from "node:readline/promises";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import qrcode from "qrcode-terminal";
 import { DATA_DIR, DEFAULT_PORT, LOG_FILE, readConfig, writeConfig } from "../lib/config.js";
 import { ensureToken, readToken, resetToken } from "../lib/token.js";
@@ -344,26 +344,39 @@ function update() {
   process.exitCode = result.status ?? 1;
 }
 
-function uninstall() {
+function removeLater(targets) {
+  if (process.platform !== "win32") {
+    for (const target of targets) fs.rmSync(target, { recursive: true, force: true });
+    return;
+  }
+  const steps = ["ping -n 4 127.0.0.1 >nul", ...targets.map((target) => `rmdir /s /q "${target}" 2>nul`)];
+  spawn("cmd.exe", ["/d", "/s", "/c", `"${steps.join(" & ")}"`], {
+    detached: true,
+    stdio: "ignore",
+    windowsHide: true,
+    windowsVerbatimArguments: true,
+  }).unref();
+}
+
+async function uninstall() {
   const cfg = config();
   service.uninstall(cfg.service);
+  await waitStopped(cfg.port);
   writeConfig({ ...readConfig(), service: undefined });
   say("Stopped and removed from startup.");
   const installed = service.APP_DIR === path.join(DATA_DIR, "app");
+  const targets = [];
   if (flags.has("--purge")) {
     say(`Deleting ${DATA_DIR} (token, uploads, settings${installed ? ", program" : ""}).`);
-    fs.rmSync(DATA_DIR, { recursive: true, force: true });
+    targets.push(DATA_DIR);
   } else {
     say(dim(`Your token, uploads and settings are still in ${DATA_DIR}. Add --purge to delete them.`));
+    if (installed) targets.push(path.join(DATA_DIR, "app"), path.join(DATA_DIR, "node"));
   }
   if (installed) {
-    const launcher = process.platform === "win32" ? path.join(DATA_DIR, "bin") : path.join(os.homedir(), ".local", "bin", "cc-remote");
-    fs.rmSync(launcher, { recursive: true, force: true });
-    if (!flags.has("--purge")) {
-      fs.rmSync(path.join(DATA_DIR, "app"), { recursive: true, force: true });
-      fs.rmSync(path.join(DATA_DIR, "node"), { recursive: true, force: true });
-    }
+    targets.push(process.platform === "win32" ? path.join(DATA_DIR, "bin") : path.join(os.homedir(), ".local", "bin", "cc-remote"));
   }
+  removeLater(targets);
 }
 
 function help() {
