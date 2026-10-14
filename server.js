@@ -34,17 +34,17 @@ const TOKEN_FILE = path.join(os.homedir(), ".claude-remote", "token");
 await fsp.mkdir(UPLOAD_ROOT, { recursive: true });
 
 async function loadToken() {
-  if (process.env.CLAUDE_REMOTE_TOKEN) return process.env.CLAUDE_REMOTE_TOKEN;
+  if (process.env.CLAUDE_REMOTE_TOKEN) return { token: process.env.CLAUDE_REMOTE_TOKEN, source: "env" };
   try {
     const t = (await fsp.readFile(TOKEN_FILE, "utf8")).trim();
-    if (t) return t;
+    if (t) return { token: t, source: "file" };
   } catch {}
   const t = crypto.randomBytes(18).toString("base64url");
   await fsp.mkdir(path.dirname(TOKEN_FILE), { recursive: true });
   await fsp.writeFile(TOKEN_FILE, t + "\n", { mode: 0o600 });
-  return t;
+  return { token: t, source: "new" };
 }
-const TOKEN = await loadToken();
+const { token: TOKEN, source: TOKEN_SOURCE } = await loadToken();
 
 const app = express();
 app.disable("x-powered-by");
@@ -58,7 +58,7 @@ app.use(express.json({ limit: "4mb" }));
 function tokenOf(req) {
   const h = req.get("authorization");
   if (h?.startsWith("Bearer ")) return h.slice(7);
-  return req.query.token || req.get("x-auth-token") || null;
+  return req.get("x-auth-token") || null;
 }
 
 app.use("/api", (req, res, next) => {
@@ -76,7 +76,9 @@ app.use("/api", (req, res, next) => {
 
 app.use("/api", (req, res, next) => {
   const t = tokenOf(req);
-  if (t && t.length === TOKEN.length && crypto.timingSafeEqual(Buffer.from(t), Buffer.from(TOKEN))) return next();
+  const given = Buffer.from(t || "");
+  const expected = Buffer.from(TOKEN);
+  if (given.length === expected.length && crypto.timingSafeEqual(given, expected)) return next();
   res.status(401).json({ error: "Invalid token" });
 });
 
@@ -348,5 +350,7 @@ app.get(/.*/, (req, res) => {
 app.listen(PORT, HOST, () => {
   console.log(`claude-remote → http://${HOST}:${PORT}`);
   console.log(`serving: ${HAS_APP ? "app/dist" : "public (legacy)"}`);
-  console.log(`token: ${TOKEN}`);
+  if (TOKEN_SOURCE === "new") console.log(`token: ${TOKEN} (saved to ${TOKEN_FILE})`);
+  else if (TOKEN_SOURCE === "file") console.log(`token: in ${TOKEN_FILE}`);
+  else console.log("token: from CLAUDE_REMOTE_TOKEN");
 });

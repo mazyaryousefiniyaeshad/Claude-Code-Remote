@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { streamUrl } from "./client";
+import { authHeaders, streamUrl } from "./client";
+import { openEventStream, type EventStream } from "./eventStream";
 import type { MessagePart, Pending, QueuedMessage, ToolResult } from "./types";
 
 export interface LiveTool {
@@ -51,7 +52,7 @@ export function useRunStream(handlers: StreamHandlers = {}) {
   const [startedAt, setStartedAt] = useState(0);
   const [live, setLive] = useState<LiveState | null>(null);
 
-  const sourceRef = useRef<EventSource | null>(null);
+  const sourceRef = useRef<EventStream | null>(null);
   const consumedRef = useRef(0);
   const liveRef = useRef<LiveState | null>(null);
   const handlersRef = useRef(handlers);
@@ -74,17 +75,14 @@ export function useRunStream(handlers: StreamHandlers = {}) {
 
   const connect = useCallback(
     (id: string, from: number) => {
-      const source = new EventSource(streamUrl(id, from));
-      sourceRef.current = source;
-
-      source.onmessage = (event) => {
+      const onData = (data: string) => {
         consumedRef.current += 1;
         const current = liveRef.current;
         if (!current) return;
 
         let payload: Record<string, unknown>;
         try {
-          payload = JSON.parse(event.data);
+          payload = JSON.parse(data);
         } catch {
           return;
         }
@@ -204,7 +202,7 @@ export function useRunStream(handlers: StreamHandlers = {}) {
         commit(next);
       };
 
-      source.onerror = () => {
+      const onError = () => {
         source.close();
         if (sourceRef.current !== source) return;
         sourceRef.current = null;
@@ -212,6 +210,9 @@ export function useRunStream(handlers: StreamHandlers = {}) {
           if (liveRef.current) connect(id, consumedRef.current);
         }, 1500);
       };
+
+      const source = openEventStream(streamUrl(id, from), authHeaders(), onData, onError);
+      sourceRef.current = source;
     },
     [commit],
   );

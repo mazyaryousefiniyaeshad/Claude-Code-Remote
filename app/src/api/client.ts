@@ -64,12 +64,17 @@ export const api = {
   },
 };
 
-export function thumbUrl(filePath: string) {
+export function authHeaders(): Record<string, string> {
   const token = readToken();
-  return apiUrl(`/thumb?path=${encodeURIComponent(filePath)}&token=${encodeURIComponent(token ?? "")}`);
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+export async function fetchThumb(filePath: string, signal?: AbortSignal): Promise<Blob> {
+  const res = await fetch(apiUrl(`/thumb?path=${encodeURIComponent(filePath)}`), { headers: authHeaders(), signal });
+  if (!res.ok) throw new ApiError(res.statusText, res.status);
+  return res.blob();
 }
 
 export function streamUrl(runId: string, from: number) {
-  const token = readToken();
-  return apiUrl(`/run/${runId}/stream?from=${from}&token=${encodeURIComponent(token ?? "")}`);
+  return apiUrl(`/run/${runId}/stream?from=${from}`);
 }

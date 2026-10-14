@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Mask, Toast } from "antd-mobile";
-import { api, thumbUrl } from "../../api/client";
+import { api } from "../../api/client";
+import { Thumb } from "../../components/Thumb";
 import type { Attachment } from "../../api/types";
 import { basename } from "../../lib/format";
 import "./preview.css";
@@ -61,7 +62,7 @@ export function FilePreview({ file, onClose }: { file: Attachment | null; onClos
 
         <div className="preview-body">
           {isImage ? (
-            <img className="preview-image" src={thumbUrl(file.path)} alt={file.name} />
+            <Thumb className="preview-image" path={file.path} alt={file.name} />
           ) : loading ? (
             <p className="preview-note">Loading…</p>
           ) : text !== null ? (

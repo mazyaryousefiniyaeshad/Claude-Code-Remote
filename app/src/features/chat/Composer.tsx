@@ -1,6 +1,7 @@
 import { useRef, useState, type ClipboardEvent, type DragEvent, type KeyboardEvent } from "react";
 import type { Attachment } from "../../api/types";
-import { api, thumbUrl } from "../../api/client";
+import { api } from "../../api/client";
+import { Thumb } from "../../components/Thumb";
 import { enterSends } from "../../lib/storage";
 import { FilePreview } from "./FilePreview";
 
@@ -118,7 +119,7 @@ export function Composer({ running, onSend, chips, queue }: ComposerProps) {
                 aria-label={`Preview ${file.name}`}
               >
                 {file.mime?.startsWith("image/") ? (
-                  <img className="attachment-thumb" src={thumbUrl(file.path)} alt="" />
+                  <Thumb className="attachment-thumb" path={file.path} />
                 ) : (
                   <span className="attachment-icon" aria-hidden="true" />
                 )}
