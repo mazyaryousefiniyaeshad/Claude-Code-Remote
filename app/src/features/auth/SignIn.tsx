@@ -3,6 +3,7 @@ import { Button, Input } from "antd-mobile";
 import { Capacitor } from "@capacitor/core";
 import { readServer, writeServer, writeToken } from "../../lib/storage";
 import { parsePairing } from "../../lib/pairing";
+import { api } from "../../api/client";
 import "./signin.css";
 
 export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
@@ -20,7 +21,6 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
     writeServer(nextServer.trim());
     writeToken(trimmedToken);
     try {
-      const { api } = await import("../../api/client");
       await api.get("/health");
       onSignedIn();
     } catch (cause) {
