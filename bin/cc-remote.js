@@ -10,7 +10,7 @@ import { DATA_DIR, DEFAULT_PORT, LOG_FILE, readConfig, writeConfig } from "../li
 import { ensureToken, readToken, resetToken } from "../lib/token.js";
 import * as service from "../lib/service.js";
 
-const REPO = "mazyaryousefiniyaeshad/cc-remote";
+const REPO = "mazyaryousefiniyaeshad/Claude-Code-Remote";
 const APK_URL = `https://github.com/${REPO}/releases/latest/download/cc-remote.apk`;
 const INSTALL_SH = `https://raw.githubusercontent.com/${REPO}/master/install.sh`;
 const INSTALL_PS1 = `https://raw.githubusercontent.com/${REPO}/master/install.ps1`;

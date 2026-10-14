@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-REPO="mazyaryousefiniyaeshad/cc-remote"
+REPO="mazyaryousefiniyaeshad/Claude-Code-Remote"
 NODE_MAJOR=22
 DATA_DIR="${CC_REMOTE_HOME:-$HOME/.cc-remote}"
 APP_DIR="$DATA_DIR/app"

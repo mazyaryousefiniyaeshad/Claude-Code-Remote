@@ -26,13 +26,13 @@ home, or a server you reach over SSH.
 **macOS and Linux**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mazyaryousefiniyaeshad/cc-remote/master/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/mazyaryousefiniyaeshad/Claude-Code-Remote/master/install.sh | sh
 ```
 
 **Windows** (PowerShell)
 
 ```powershell
-irm https://raw.githubusercontent.com/mazyaryousefiniyaeshad/cc-remote/master/install.ps1 | iex
+irm https://raw.githubusercontent.com/mazyaryousefiniyaeshad/Claude-Code-Remote/master/install.ps1 | iex
 ```
 
 The installer:
@@ -51,7 +51,7 @@ Nothing else to set up. Everything lives in `~/.cc-remote`.
 **Scan the QR code** with your phone's camera. The app opens and you are signed in.
 Lost it? Run `cc-remote pair` to see it again.
 
-**Android app.** Download [`cc-remote.apk`](https://github.com/mazyaryousefiniyaeshad/cc-remote/releases/latest/download/cc-remote.apk),
+**Android app.** Download [`cc-remote.apk`](https://github.com/mazyaryousefiniyaeshad/Claude-Code-Remote/releases/latest/download/cc-remote.apk),
 open it, and paste the link that `cc-remote pair` shows.
 
 **iPhone.** Open the link in Safari, then Share → Add to Home Screen. Open it from
@@ -227,8 +227,8 @@ Every route needs `Authorization: Bearer <token>`.
 ## Development
 
 ```bash
-git clone https://github.com/mazyaryousefiniyaeshad/cc-remote.git
-cd cc-remote
+git clone https://github.com/mazyaryousefiniyaeshad/Claude-Code-Remote.git
+cd Claude-Code-Remote
 npm install
 cd app && npm install && npm run build && cd ..
 node bin/cc-remote.js run     # server on 61777, serves app/dist

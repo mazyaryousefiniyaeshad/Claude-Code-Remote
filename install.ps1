@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
-$Repo = "mazyaryousefiniyaeshad/cc-remote"
+$Repo = "mazyaryousefiniyaeshad/Claude-Code-Remote"
 $NodeMajor = 22
 $DataDir = if ($env:CC_REMOTE_HOME) { $env:CC_REMOTE_HOME } else { Join-Path $env:USERPROFILE ".cc-remote" }
 $AppDir = Join-Path $DataDir "app"
@@ -80,7 +80,7 @@ try {
       $SourceZip = Join-Path $Tmp "source.zip"
       Invoke-WebRequest -UseBasicParsing "https://codeload.github.com/$Repo/zip/refs/heads/master" -OutFile $SourceZip
       Expand-Archive $SourceZip -DestinationPath $Tmp
-      $Source = Join-Path $Tmp "cc-remote-master"
+      $Source = Join-Path $Tmp "Claude-Code-Remote-master"
     }
   }
   if (-not (Test-Path $Source)) { throw "Could not unpack the download" }

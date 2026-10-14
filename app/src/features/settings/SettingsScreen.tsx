@@ -15,7 +15,7 @@ import {
 import { Capacitor } from "@capacitor/core";
 import "./settings.css";
 
-const ANDROID_APP_URL = "https://github.com/mazyaryousefiniyaeshad/cc-remote/releases/latest/download/cc-remote.apk";
+const ANDROID_APP_URL = "https://github.com/mazyaryousefiniyaeshad/Claude-Code-Remote/releases/latest/download/cc-remote.apk";
 
 export function SettingsScreen() {
   const [theme, setTheme] = useState(() => readTheme() ?? document.documentElement.dataset.theme ?? "dark");
