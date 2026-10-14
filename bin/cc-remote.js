@@ -336,10 +336,11 @@ function update() {
     say("This copy is a git checkout. Update it with: git pull, then cc-remote restart");
     return;
   }
+  const env = { ...process.env, CC_REMOTE_UPDATE: "1" };
   const result =
     process.platform === "win32"
-      ? spawnSync("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", `irm ${INSTALL_PS1} | iex`], { stdio: "inherit" })
-      : spawnSync("sh", ["-c", `curl -fsSL ${INSTALL_SH} | sh -s -- --update`], { stdio: "inherit" });
+      ? spawnSync("powershell.exe", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", `irm ${INSTALL_PS1} | iex`], { stdio: "inherit", env })
+      : spawnSync("sh", ["-c", `curl -fsSL ${INSTALL_SH} | sh`], { stdio: "inherit", env });
   process.exitCode = result.status ?? 1;
 }
 

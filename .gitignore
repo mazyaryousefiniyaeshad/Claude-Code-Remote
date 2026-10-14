@@ -24,3 +24,5 @@ logs/
 
 com.mazyar.claude-remote.daemon.plist
 .dockertest/
+
+dist/
